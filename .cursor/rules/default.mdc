@@ -1,0 +1,22 @@
+---
+description: MVP workflow, scope guardrails, and incremental delivery
+alwaysApply: true
+---
+
+# Delivery and scope
+
+- Work step by step.
+- Prioritize MVP simplicity.
+- Do not over-engineer.
+- Do not add future features unless explicitly requested.
+- Do not generate architecture, SQL, frontend and business logic all at once.
+- Separate required-for-v1 from optional-for-later.
+- Wait for confirmation before moving to the next major step.
+- Prefer minimal working code over broad architecture.
+
+## Avoid by default
+
+- RLS
+- Advanced auth
+- Audit/versioning systems
+- Certification workflows

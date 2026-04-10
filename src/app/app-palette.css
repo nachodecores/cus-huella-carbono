@@ -1,0 +1,15 @@
+/**
+ * Default app color palette (single source of truth).
+ * Main brand: #066A79. Do not add colors here unless explicitly requested.
+ */
+:root {
+  --palette-brand: #066a79;
+  --palette-white: #ffffff;
+  --palette-sky: #6dc8e6;
+  --palette-warm-1: #f2d9ab;
+  --palette-warm-2: #eac479;
+  --palette-warm-3: #d4a93c;
+  --palette-warm-4: #c9612a;
+  --palette-warm-5: #b64c16;
+  --palette-warm-6: #a1471f;
+}
