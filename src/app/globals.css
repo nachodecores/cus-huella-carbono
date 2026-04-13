@@ -1,6 +1,9 @@
 @import "./app-palette.css";
 @import "tailwindcss";
 
+/* Tema claro fijo: las utilidades `dark:` solo aplican bajo .dark (no se usa en el documento). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -22,16 +25,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+html {
+  color-scheme: light;
 }
 
 /* Oculta flechas de <input type="number"> (Chrome, Safari, Edge, Firefox) */
