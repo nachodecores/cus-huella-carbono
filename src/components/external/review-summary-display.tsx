@@ -159,27 +159,6 @@ export function SubmissionReadonlySummary({
             ))}
           </div>
         ) : null}
-        <Row label="¿Enmiendas orgánicas?" value={yn(payload.organic_amendment_used)} />
-        {payload.organic_amendment_used ? (
-          <>
-            <Row
-              label="% superficie tratada"
-              value={
-                payload.organic_amendment_area_percent != null
-                  ? String(payload.organic_amendment_area_percent)
-                  : "—"
-              }
-            />
-            <Row
-              label="Dosis (kg/ha sobre área tratada)"
-              value={
-                payload.organic_amendment_rate_kg_ha != null
-                  ? String(payload.organic_amendment_rate_kg_ha)
-                  : "—"
-              }
-            />
-          </>
-        ) : null}
         </dl>
       </ExternalSectionCard>
 

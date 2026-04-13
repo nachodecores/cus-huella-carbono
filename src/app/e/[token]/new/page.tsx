@@ -100,6 +100,7 @@ export default async function NewSubmissionPage({ params }: PageProps) {
       token={token}
       companyName={company.name}
       basePath={basePath}
+      headingTitle="Calculadora de Huella de Carbono"
       cropOptions={crops}
       initialSubmission={initialSubmission}
       initialFertilizerLines={[] as FertilizerLineRow[]}

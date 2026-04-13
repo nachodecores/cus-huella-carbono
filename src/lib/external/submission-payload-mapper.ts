@@ -82,15 +82,6 @@ export function mapDbSubmissionToSavePayload(
         : Number(row.fallow_spray_passes),
     tillage_used: Boolean(row.tillage_used),
     tillageLines,
-    organic_amendment_used: Boolean(row.organic_amendment_used),
-    organic_amendment_area_percent:
-      row.organic_amendment_area_percent == null
-        ? null
-        : Number(row.organic_amendment_area_percent),
-    organic_amendment_rate_kg_ha:
-      row.organic_amendment_rate_kg_ha == null
-        ? null
-        : Number(row.organic_amendment_rate_kg_ha),
     seeding_rate_kg_ha:
       row.seeding_rate_kg_ha == null ? null : Number(row.seeding_rate_kg_ha),
     inoculant_used: Boolean(row.inoculant_used),
@@ -122,9 +113,6 @@ export function emptyNewDraftSubmissionPayload(): SaveDraftPayload {
     fallow_spray_passes: null,
     tillage_used: false,
     tillageLines: [],
-    organic_amendment_used: false,
-    organic_amendment_area_percent: null,
-    organic_amendment_rate_kg_ha: null,
     seeding_rate_kg_ha: null,
     inoculant_used: false,
     seed_treatment_used: false,

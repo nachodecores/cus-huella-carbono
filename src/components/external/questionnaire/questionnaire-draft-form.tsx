@@ -11,6 +11,7 @@ import type { SaveDraftPayload } from "@/lib/external/draft-save-validation";
 import { submitFinalQuestionnaire } from "@/lib/external/submit-final-actions";
 import { BinaryPill } from "@/components/external/binary-pill";
 import { ExternalSectionCard } from "@/components/external/external-section-card";
+import { FormHeader } from "@/components/external/form-header";
 
 export type DraftSubmissionRow = { id: string } & SaveDraftPayload;
 
@@ -111,6 +112,8 @@ type QuestionnaireDraftFormCommonProps = {
   initialTillageLines: TillageLineRow[];
   fertilizerCatalog: FertilizerOption[];
   tillageToolCatalog: TillageToolOption[];
+  /** Overrides default "Cuestionario (borrador)" heading prefix (e.g. `/e/.../new`). */
+  headingTitle?: string;
 };
 
 export type QuestionnaireDraftFormProps =
@@ -370,7 +373,6 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
 
   const showFallow = sub.fallow_used;
   const showTillage = sub.tillage_used;
-  const showOrganic = sub.organic_amendment_used;
   const showFertilizerDetails = sub.fertilizers_used;
   const showDrying = sub.drying_used;
   const showTransport = sub.transport_used;
@@ -384,28 +386,25 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
   const seasonYearDisplay =
     props.mode === "create" ? createSeasonYear : props.seasonYear;
 
+  const pageTitle = `${props.headingTitle ?? "Cuestionario (borrador)"} - ${companyName}`;
+
   return (
-    <div className="relative isolate min-h-[100dvh] w-full">
+    <div className="relative isolate min-h-[100dvh] w-full pt-20">
+      <FormHeader title={pageTitle} />
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-[url('/patronsemillas.svg')] bg-[length:480px_720px] bg-repeat opacity-15"
         aria-hidden
       />
       <div className="relative mx-auto max-w-2xl px-4 py-8">
-      <header className="mb-8">
-        <p className="text-xs text-neutral-500 dark:text-neutral-500">
-          {companyName}
-        </p>
-        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-          Cuestionario (borrador)
-        </h1>
         {props.mode === "edit" ? (
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-500">
-            Envío: {props.submissionId}
-          </p>
+          <header className="mb-8">
+            <p className="text-xs text-neutral-500 dark:text-neutral-500">
+              Envío: {props.submissionId}
+            </p>
+          </header>
         ) : null}
-      </header>
 
-      <div className="space-y-14">
+        <div className="space-y-14">
         <FormSection title="1. Datos generales y resultados productivos">
           {props.mode === "create" ? (
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:gap-4 lg:gap-6">
@@ -691,68 +690,6 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                   />
                 </li>
               </ul>
-            ) : null}
-          </ConditionalQuestionGroup>
-
-          <ConditionalQuestionGroup>
-            <YesNo
-              id="organic_amendment_used"
-              label="¿Aplicaste estiércol, compost u otra enmienda orgánica?"
-              value={sub.organic_amendment_used}
-              onChange={(v) => {
-                updateSub("organic_amendment_used", v);
-                if (!v) {
-                  updateSub("organic_amendment_area_percent", null);
-                  updateSub("organic_amendment_rate_kg_ha", null);
-                }
-              }}
-            />
-            {showOrganic ? (
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm text-neutral-800 dark:text-neutral-200">
-                    % de superficie tratada en el lote
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    step="any"
-                    placeholder="0"
-                    className="input-number-no-spin mt-1 w-full max-w-xs rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
-                    value={numToInput(sub.organic_amendment_area_percent)}
-                    onChange={(e) =>
-                      updateSub(
-                        "organic_amendment_area_percent",
-                        e.target.value === ""
-                          ? null
-                          : Number(e.target.value),
-                      )
-                    }
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-neutral-800 dark:text-neutral-200">
-                    Dosis en kg/ha sobre el área tratada
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    step="any"
-                    placeholder="0"
-                    className="input-number-no-spin mt-1 w-full max-w-xs rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
-                    value={numToInput(sub.organic_amendment_rate_kg_ha)}
-                    onChange={(e) =>
-                      updateSub(
-                        "organic_amendment_rate_kg_ha",
-                        e.target.value === ""
-                          ? null
-                          : Number(e.target.value),
-                      )
-                    }
-                  />
-                </div>
-              </div>
             ) : null}
           </ConditionalQuestionGroup>
         </FormSection>

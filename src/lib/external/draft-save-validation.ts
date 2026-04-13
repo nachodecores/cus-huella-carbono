@@ -27,9 +27,6 @@ export type SaveDraftPayload = {
   fallow_spray_passes: number | null;
   tillage_used: boolean;
   tillageLines: SaveDraftTillageLineInput[];
-  organic_amendment_used: boolean;
-  organic_amendment_area_percent: number | null;
-  organic_amendment_rate_kg_ha: number | null;
   seeding_rate_kg_ha: number | null;
   inoculant_used: boolean;
   seed_treatment_used: boolean;
@@ -49,7 +46,6 @@ export type SaveDraftPayload = {
 const GATE_KEYS = [
   "fallow_used",
   "tillage_used",
-  "organic_amendment_used",
   "fertilizers_used",
   "conditioning_used",
   "drying_used",
@@ -169,24 +165,6 @@ export function validateDraftSave(p: SaveDraftPayload): string | null {
     }
   }
 
-  if (p.organic_amendment_used) {
-    if (
-      p.organic_amendment_area_percent == null ||
-      !Number.isFinite(p.organic_amendment_area_percent) ||
-      p.organic_amendment_area_percent <= 0 ||
-      p.organic_amendment_area_percent > 100
-    ) {
-      return "Si usaste enmienda orgánica, indicá el % de superficie tratada (mayor a 0 y hasta 100).";
-    }
-    if (
-      p.organic_amendment_rate_kg_ha == null ||
-      !Number.isFinite(p.organic_amendment_rate_kg_ha) ||
-      p.organic_amendment_rate_kg_ha <= 0
-    ) {
-      return "Si usaste enmienda orgánica, indicá la dosis en kg/ha sobre el área tratada (mayor a 0).";
-    }
-  }
-
   const passFields: Array<keyof SaveDraftPayload> = [
     "post_emergence_herbicide_passes",
     "fungicide_passes",
@@ -283,10 +261,6 @@ export function sanitizePayloadByGates(p: SaveDraftPayload): SaveDraftPayload {
   if (!out.fallow_used) {
     out.fallow_spray_passes = null;
   }
-  if (!out.organic_amendment_used) {
-    out.organic_amendment_area_percent = null;
-    out.organic_amendment_rate_kg_ha = null;
-  }
 
   if (!out.drying_used) {
     out.drying_main_method = null;
@@ -307,8 +281,6 @@ export const deprecatedSubmissionFieldsNeutral = {
   fallow_diesel_liters: null as null,
   tillage_passes: null as null,
   tillage_diesel_liters: null as null,
-  organic_amendment_quantity: null as null,
-  organic_amendment_unit: null as null,
   crop_protection_used: false,
   crop_protection_spray_passes: null as null,
   crop_protection_diesel_liters: null as null,

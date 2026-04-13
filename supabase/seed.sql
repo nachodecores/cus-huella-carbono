@@ -98,3 +98,171 @@ INSERT INTO companies (id, name, access_token) VALUES
     'mvp_dev_germinar_5c9e7a0b2d486f1c'
   )
 ON CONFLICT (id) DO NOTHING;
+
+-- ---------------------------------------------------------------------------
+-- Carbon MVP: default assumption set + placeholder factors (TEMP — replace
+-- with study-based values before relying on footprint results).
+-- Depends on: fertilizers, tillage_tools (seeded above).
+-- ---------------------------------------------------------------------------
+
+INSERT INTO assumption_set (id, label, is_default, notes)
+VALUES (
+  'a2000000-0000-4000-8000-000000000001'::uuid,
+  'MVP default',
+  true,
+  'TEMP: all numeric factors below are placeholders (mostly 0). Replace with validated assumptions before production use.'
+)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO assumption_set_global (
+  assumption_set_id,
+  param_key,
+  value_numeric,
+  unit,
+  notes,
+  display_order
+)
+VALUES
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'diesel_kg_co2e_per_l',
+    0,
+    'kg_co2e_per_l',
+    'TEMP: tillage CO2e = L diesel * this; set to real diesel EF before use.',
+    1
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'fallow_pass_kg_co2e_per_ha_per_pass',
+    0,
+    'kg_co2e_per_ha_per_pass',
+    'TEMP placeholder',
+    2
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'herbicide_pass_kg_co2e_per_ha_per_pass',
+    0,
+    'kg_co2e_per_ha_per_pass',
+    'TEMP placeholder',
+    3
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'fungicide_pass_kg_co2e_per_ha_per_pass',
+    0,
+    'kg_co2e_per_ha_per_pass',
+    'TEMP placeholder',
+    4
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'insecticide_pass_kg_co2e_per_ha_per_pass',
+    0,
+    'kg_co2e_per_ha_per_pass',
+    'TEMP placeholder',
+    5
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'inoculant_kg_co2e_per_kg_clean_seed_if_used',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    6
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'seed_treatment_kg_co2e_per_kg_clean_seed_if_used',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    7
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'harvest_directa_kg_co2e_per_kg_clean_seed',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    8
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'harvest_corte_hilerado_kg_co2e_per_kg_clean_seed',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    9
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'drying_gas_kg_co2e_per_kg_clean_seed',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    10
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'drying_gasoil_kg_co2e_per_kg_clean_seed',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    11
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'drying_electricidad_kg_co2e_per_kg_clean_seed',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    12
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'conditioning_kg_co2e_per_kg_clean_seed_if_used',
+    0,
+    'kg_co2e_per_kg_clean_seed',
+    'TEMP placeholder',
+    13
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'transport_kg_co2e_per_tonne_km',
+    0,
+    'kg_co2e_per_tonne_km',
+    'TEMP placeholder (transport mass rule: seed_produced_kg in app)',
+    14
+  )
+ON CONFLICT (assumption_set_id, param_key) DO NOTHING;
+
+INSERT INTO assumption_fertilizer_factor (
+  assumption_set_id,
+  fertilizer_id,
+  kg_co2e_per_kg_product,
+  kg_co2e_per_l_product,
+  notes
+)
+SELECT
+  'a2000000-0000-4000-8000-000000000001'::uuid,
+  f.id,
+  CASE WHEN f.application_unit = 'kg_ha' THEN 0::numeric ELSE NULL END,
+  CASE WHEN f.application_unit = 'l_ha' THEN 0::numeric ELSE NULL END,
+  'TEMP placeholder — replace with product-specific intensity'
+FROM fertilizers f
+ON CONFLICT (assumption_set_id, fertilizer_id) DO NOTHING;
+
+INSERT INTO assumption_tillage_tool_factor (
+  assumption_set_id,
+  tillage_tool_id,
+  diesel_liters_per_ha_per_pass,
+  notes
+)
+SELECT
+  'a2000000-0000-4000-8000-000000000001'::uuid,
+  t.id,
+  COALESCE(t.diesel_liters_per_ha_per_pass, 0::numeric),
+  'TEMP: copied from tillage_tools or 0 if null — replace in admin when known'
+FROM tillage_tools t
+ON CONFLICT (assumption_set_id, tillage_tool_id) DO NOTHING;
