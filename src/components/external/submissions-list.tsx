@@ -11,7 +11,6 @@ export type SubmissionListItem = {
 
 type SubmissionsListProps = {
   token: string;
-  companyName: string;
   submissions: SubmissionListItem[];
 };
 
@@ -25,30 +24,24 @@ function statusLabel(s: "draft" | "submitted") {
 
 export function SubmissionsList({
   token,
-  companyName,
   submissions,
 }: SubmissionsListProps) {
   const base = `/e/${encodeURIComponent(token)}`;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <header className="mb-8">
-        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-          {companyName}
-        </h1>
-        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-          Listado de cultivos
-        </p>
-      </header>
+    <div className="relative mx-auto max-w-3xl px-4 py-8">
+      <p className="mb-8 text-sm text-neutral-600 dark:text-neutral-400">
+        Listado de cultivos
+      </p>
 
       {submissions.length === 0 ? (
         <p className="rounded-lg border border-neutral-200 bg-neutral-50/80 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900/40 dark:text-neutral-400">
           Todavía no hay envíos. Creá el primero con el botón de abajo.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-800">
-          <table className="w-full min-w-[32rem] text-left text-sm">
-            <thead className="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900/50">
+        <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-white">
+          <table className="w-full min-w-[32rem] bg-white text-left text-sm dark:bg-white">
+            <thead className="border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-white">
               <tr>
                 <th className="px-3 py-2 font-medium text-neutral-700 dark:text-neutral-300">
                   Cultivo
@@ -76,7 +69,7 @@ export function SubmissionsList({
                 return (
                   <tr
                     key={row.id}
-                    className="border-b border-neutral-100 last:border-0 dark:border-neutral-800/80"
+                    className="border-b border-neutral-100 bg-white last:border-0 dark:border-neutral-800/80 dark:bg-white"
                   >
                     <td className="px-3 py-2 text-neutral-900 dark:text-neutral-100">
                       {row.crops?.label ?? "—"}

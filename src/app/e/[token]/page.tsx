@@ -1,3 +1,4 @@
+import { FormHeader } from "@/components/external/form-header";
 import { InvalidToken } from "@/components/external/invalid-token";
 import {
   type SubmissionListItem,
@@ -59,11 +60,16 @@ export default async function ExternalHomePage({ params }: PageProps) {
     };
   });
 
+  const pageTitle = `Calculadora de Huella de Carbono - ${company.name}`;
+
   return (
-    <SubmissionsList
-      token={token}
-      companyName={company.name}
-      submissions={submissions}
-    />
+    <div className="relative isolate min-h-[100dvh] w-full pt-[5.75rem] sm:pt-20">
+      <FormHeader title={pageTitle} />
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-[url('/patronsemillas.svg')] bg-[length:480px_720px] bg-repeat opacity-15"
+        aria-hidden
+      />
+      <SubmissionsList token={token} submissions={submissions} />
+    </div>
   );
 }

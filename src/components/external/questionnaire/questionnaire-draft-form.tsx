@@ -389,7 +389,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
   const pageTitle = `${props.headingTitle ?? "Cuestionario (borrador)"} - ${companyName}`;
 
   return (
-    <div className="relative isolate min-h-[100dvh] w-full pt-20">
+    <div className="relative isolate min-h-[100dvh] w-full pt-[5.75rem] sm:pt-20">
       <FormHeader title={pageTitle} />
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-[url('/patronsemillas.svg')] bg-[length:480px_720px] bg-repeat opacity-15"
@@ -406,145 +406,176 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
 
         <div className="space-y-14">
         <FormSection title="1. Datos generales y resultados productivos">
-          {props.mode === "create" ? (
-            <div className="flex flex-col gap-4 md:flex-row md:items-end md:gap-4 lg:gap-6">
-              <div className="min-w-0 flex-1">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+            <div className="flex min-w-0 flex-col gap-4">
+              {props.mode === "create" ? (
+                <div className="min-w-0">
+                  <label
+                    htmlFor="new_crop_id"
+                    className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
+                  >
+                    Cultivo
+                  </label>
+                  <select
+                    id="new_crop_id"
+                    required
+                    value={createCropId === "" ? "" : String(createCropId)}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setCreateCropId(v === "" ? "" : Number(v));
+                    }}
+                    className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100"
+                  >
+                    <option value="" disabled>
+                      Seleccionar…
+                    </option>
+                    {props.cropOptions.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                    Cultivo
+                  </p>
+                  <p className="mt-1 text-sm text-neutral-700 dark:text-neutral-300">
+                    {cropLabelDisplay}
+                  </p>
+                </div>
+              )}
+              <div className="min-w-0">
                 <label
-                  htmlFor="new_crop_id"
+                  htmlFor="area_cultivated_ha"
                   className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
                 >
-                  Cultivo
+                  Superficie (hectáreas totales)
                 </label>
-                <select
-                  id="new_crop_id"
-                  required
-                  value={createCropId === "" ? "" : String(createCropId)}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    setCreateCropId(v === "" ? "" : Number(v));
-                  }}
-                  className="mt-1 w-full max-w-md rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100"
-                >
-                  <option value="" disabled>
-                    Seleccionar…
-                  </option>
-                  {props.cropOptions.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="w-full min-w-0 shrink-0 md:w-auto">
-                <BinaryPill
-                  id="create_season_type"
-                  legend="Zafra"
-                  value={createSeasonType}
-                  onChange={setCreateSeasonType}
-                  optionLeft={{ value: "primavera", label: "Primavera" }}
-                  optionRight={{ value: "otono", label: "Otoño" }}
-                />
-              </div>
-              <div className="w-full min-w-0 shrink-0 md:w-24 lg:w-28">
                 <input
-                  id="create_season_year"
+                  id="area_cultivated_ha"
                   type="number"
-                  min={2000}
-                  max={2100}
-                  step={1}
-                  value={createSeasonYear}
-                  onChange={(e) =>
-                    setCreateSeasonYear(Number(e.target.value) || 2000)
-                  }
-                  aria-label="Año"
-                  className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100"
+                  min={0}
+                  step="any"
+                  placeholder="0"
+                  className="input-number-no-spin mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
+                  value={numToInput(sub.area_cultivated_ha)}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (raw === "") {
+                      updateSub("area_cultivated_ha", null);
+                      return;
+                    }
+                    const n = Number(raw);
+                    updateSub(
+                      "area_cultivated_ha",
+                      Number.isFinite(n) ? n : null,
+                    );
+                  }}
                 />
               </div>
             </div>
-          ) : (
-            <p className="text-sm text-neutral-700 dark:text-neutral-300">
-              {cropLabelDisplay} · {seasonTypeLabel(seasonTypeDisplay)}{" "}
-              {seasonYearDisplay}
-            </p>
-          )}
-          <div>
-            <label
-              htmlFor="area_cultivated_ha"
-              className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
-            >
-              Superficie (hectáreas totales)
-            </label>
-            <input
-              id="area_cultivated_ha"
-              type="number"
-              min={0}
-              step="any"
-              placeholder="0"
-              className="input-number-no-spin mt-1 w-full max-w-xs rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
-              value={numToInput(sub.area_cultivated_ha)}
-              onChange={(e) => {
-                const raw = e.target.value;
-                if (raw === "") {
-                  updateSub("area_cultivated_ha", null);
-                  return;
+            <div className="flex min-w-0 flex-col items-center gap-4">
+              {props.mode === "create" ? (
+                <>
+                  <div className="mx-auto w-full max-w-sm">
+                    <BinaryPill
+                      className="text-center"
+                      id="create_season_type"
+                      legend="Zafra"
+                      value={createSeasonType}
+                      onChange={setCreateSeasonType}
+                      optionLeft={{ value: "primavera", label: "Primavera" }}
+                      optionRight={{ value: "otono", label: "Otoño" }}
+                    />
+                  </div>
+                  <div className="mx-auto w-full max-w-sm">
+                    <input
+                      id="create_season_year"
+                      type="number"
+                      min={2000}
+                      max={2100}
+                      step={1}
+                      value={createSeasonYear}
+                      onChange={(e) =>
+                        setCreateSeasonYear(Number(e.target.value) || 2000)
+                      }
+                      aria-label="Año de la zafra"
+                      className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-center text-sm text-neutral-900 shadow-sm dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-100"
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="mx-auto w-full max-w-sm text-center">
+                  <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                    Zafra
+                  </p>
+                  <p className="mt-1 text-sm text-neutral-700 dark:text-neutral-300">
+                    {seasonTypeLabel(seasonTypeDisplay)}{" "}
+                    {seasonYearDisplay}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+            <div className="min-w-0">
+              <label
+                htmlFor="gross_yield_kg_ha"
+                className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
+              >
+                Rend. bruto (kg/ha)
+              </label>
+              <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                Salida de cosechadora
+              </p>
+              <input
+                id="gross_yield_kg_ha"
+                type="number"
+                min={0}
+                step="any"
+                placeholder="0"
+                className="input-number-no-spin mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
+                value={numToInput(sub.gross_yield_kg_ha)}
+                onChange={(e) =>
+                  updateSub(
+                    "gross_yield_kg_ha",
+                    e.target.value === ""
+                      ? null
+                      : Number(e.target.value),
+                  )
                 }
-                const n = Number(raw);
-                updateSub(
-                  "area_cultivated_ha",
-                  Number.isFinite(n) ? n : null,
-                );
-              }}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="gross_yield_kg_ha"
-              className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
-            >
-              Rendimiento bruto (kg/ha, salida de cosechadora)
-            </label>
-            <input
-              id="gross_yield_kg_ha"
-              type="number"
-              min={0}
-              step="any"
-              placeholder="0"
-              className="input-number-no-spin mt-1 w-full max-w-xs rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
-              value={numToInput(sub.gross_yield_kg_ha)}
-              onChange={(e) =>
-                updateSub(
-                  "gross_yield_kg_ha",
-                  e.target.value === ""
-                    ? null
-                    : Number(e.target.value),
-                )
-              }
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="clean_yield_kg_ha"
-              className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
-            >
-              Rendimiento limpio / acondicionado (kg/ha)
-            </label>
-            <input
-              id="clean_yield_kg_ha"
-              type="number"
-              min={0}
-              step="any"
-              placeholder="0"
-              className="input-number-no-spin mt-1 w-full max-w-xs rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
-              value={numToInput(sub.clean_yield_kg_ha)}
-              onChange={(e) =>
-                updateSub(
-                  "clean_yield_kg_ha",
-                  e.target.value === ""
-                    ? null
-                    : Number(e.target.value),
-                )
-              }
-            />
+              />
+            </div>
+            <div className="min-w-0">
+              <label
+                htmlFor="clean_yield_kg_ha"
+                className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
+              >
+                Rend. limpio (kg/ha)
+              </label>
+              <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                Acondicionado
+              </p>
+              <input
+                id="clean_yield_kg_ha"
+                type="number"
+                min={0}
+                step="any"
+                placeholder="0"
+                className="input-number-no-spin mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
+                value={numToInput(sub.clean_yield_kg_ha)}
+                onChange={(e) =>
+                  updateSub(
+                    "clean_yield_kg_ha",
+                    e.target.value === ""
+                      ? null
+                      : Number(e.target.value),
+                  )
+                }
+              />
+            </div>
           </div>
         </FormSection>
 
@@ -695,44 +726,52 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
         </FormSection>
 
         <FormSection title="3. Siembra e insumos">
-          <div>
-            <label className="block text-sm font-medium text-neutral-800 dark:text-neutral-200">
-              Densidad de siembra (kg/ha)
-            </label>
-            <input
-              type="number"
-              min={0.0001}
-              step="any"
-              placeholder="0"
-              className="input-number-no-spin mt-1 w-full max-w-xs rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
-              value={numToInput(sub.seeding_rate_kg_ha)}
-              onChange={(e) =>
-                updateSub(
-                  "seeding_rate_kg_ha",
-                  e.target.value === "" ? null : Number(e.target.value),
-                )
-              }
-            />
+          <div className="flex w-full min-w-0 flex-col gap-4 sm:flex-row sm:flex-nowrap sm:items-end sm:gap-5">
+            <div className="w-full max-w-xs shrink-0 sm:w-44 md:w-48">
+              <label className="block text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                Densidad de siembra (kg/ha)
+              </label>
+              <input
+                type="number"
+                min={0.0001}
+                step="any"
+                placeholder="0"
+                className="input-number-no-spin mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-900"
+                value={numToInput(sub.seeding_rate_kg_ha)}
+                onChange={(e) =>
+                  updateSub(
+                    "seeding_rate_kg_ha",
+                    e.target.value === "" ? null : Number(e.target.value),
+                  )
+                }
+              />
+            </div>
+            <div className="flex min-w-0 w-full flex-nowrap items-end justify-start gap-2 sm:flex-1 sm:justify-end sm:gap-3 md:gap-4">
+              <div className="min-w-0 shrink">
+                <YesNo
+                  id="inoculant_used"
+                  label="¿Semilla inoculada?"
+                  value={sub.inoculant_used}
+                  onChange={(v) => updateSub("inoculant_used", v)}
+                  inline
+                />
+              </div>
+              <div className="min-w-0 shrink">
+                <YesNo
+                  id="seed_treatment_used"
+                  label="¿Semilla tratada?"
+                  value={sub.seed_treatment_used}
+                  onChange={(v) => updateSub("seed_treatment_used", v)}
+                  inline
+                />
+              </div>
+            </div>
           </div>
-          <YesNo
-            id="inoculant_used"
-            label="¿Semilla inoculada?"
-            value={sub.inoculant_used}
-            onChange={(v) => updateSub("inoculant_used", v)}
-            inline
-          />
-          <YesNo
-            id="seed_treatment_used"
-            label="¿Semilla tratada?"
-            value={sub.seed_treatment_used}
-            onChange={(v) => updateSub("seed_treatment_used", v)}
-            inline
-          />
 
           <ConditionalQuestionGroup>
             <YesNo
               id="fertilizers_used"
-              label="¿Usaste fertilizantes de la lista para este cultivo en esta temporada?"
+              label="¿Usaste fertilizantes para este cultivo en esta temporada?"
               value={sub.fertilizers_used}
               onChange={(v) => {
                 updateSub("fertilizers_used", v);
@@ -855,9 +894,6 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
         </FormSection>
 
         <FormSection title="4. Protección del cultivo">
-          <p className="text-xs text-neutral-500 dark:text-neutral-500">
-            Indicá 0 si no aplicaste ese tipo de producto.
-          </p>
           <div>
             <label
               htmlFor="post_emergence_herbicide_passes"
@@ -914,37 +950,17 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
         </FormSection>
 
         <FormSection title="5. Cosecha, secado, acondicionamiento y logística">
-          <fieldset>
-            <legend className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-              Método principal de cosecha
-            </legend>
-            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-500">
-              &quot;Corte e hilerado previo&quot; incluye secado natural en campo
-              y maquinaria asociada (no se solicita a parte).
-            </p>
-            <div className="mt-2 flex flex-wrap gap-4 text-sm text-neutral-900 dark:text-neutral-100">
-              <label className="inline-flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="harvest_main_method"
-                  checked={sub.harvest_main_method === "directa"}
-                  onChange={() => updateSub("harvest_main_method", "directa")}
-                />
-                Cosecha directa
-              </label>
-              <label className="inline-flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="harvest_main_method"
-                  checked={sub.harvest_main_method === "corte_hilerado"}
-                  onChange={() =>
-                    updateSub("harvest_main_method", "corte_hilerado")
-                  }
-                />
-                Corte e hilerado previo
-              </label>
-            </div>
-          </fieldset>
+          <BinaryPill
+            id="harvest_main_method"
+            legend="Método principal de cosecha"
+            value={sub.harvest_main_method}
+            onChange={(v) => updateSub("harvest_main_method", v)}
+            optionLeft={{ value: "directa", label: "Cosecha directa" }}
+            optionRight={{
+              value: "corte_hilerado",
+              label: "Corte e hilerado previo",
+            }}
+          />
 
           <ConditionalQuestionGroup>
             <YesNo
@@ -952,6 +968,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
               label="¿Se usó secador?"
               value={sub.drying_used}
               onChange={(v) => updateSub("drying_used", v)}
+              inline
             />
             {showDrying ? (
               <div>
@@ -985,6 +1002,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
             label="¿Hubo limpieza / selección / acondicionamiento en línea?"
             value={sub.conditioning_used}
             onChange={(v) => updateSub("conditioning_used", v)}
+            inline
           />
 
           <ConditionalQuestionGroup>
@@ -993,6 +1011,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
               label="¿Transportaste semilla fuera del campo o entre establecimientos?"
               value={sub.transport_used}
               onChange={(v) => updateSub("transport_used", v)}
+              inline
             />
             {showTransport ? (
               <div>
