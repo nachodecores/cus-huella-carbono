@@ -12,6 +12,7 @@ import { submitFinalQuestionnaire } from "@/lib/external/submit-final-actions";
 import { BinaryPill } from "@/components/external/binary-pill";
 import { ExternalSectionCard } from "@/components/external/external-section-card";
 import { FormHeader } from "@/components/external/form-header";
+import { HelpInfoDialog } from "@/components/external/help-info-dialog";
 
 export type DraftSubmissionRow = { id: string } & SaveDraftPayload;
 
@@ -79,25 +80,31 @@ function RemoveLineIconButton({
 }
 
 function AddLineCircleButton({
-  label,
+  caption,
   onClick,
 }: {
-  label: string;
+  caption: string;
   onClick: () => void;
 }) {
   return (
     <div className="flex items-center gap-2">
       <span className="w-7 shrink-0" aria-hidden />
-      <div className="flex min-w-0 flex-1 justify-center py-1">
+      <div className="flex min-w-0 flex-1 items-center justify-center gap-2 py-1">
         <button
           type="button"
           onClick={onClick}
-          aria-label={label}
-          title={label}
+          aria-label={caption}
+          title={caption}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral-300 bg-white text-xl font-medium leading-none text-neutral-700 shadow-sm transition-colors hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-1 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:focus:ring-offset-neutral-950"
         >
           +
         </button>
+        <span
+          className="text-sm font-medium text-neutral-800 dark:text-neutral-200"
+          aria-hidden
+        >
+          {caption}
+        </span>
       </div>
     </div>
   );
@@ -414,7 +421,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                     htmlFor="new_crop_id"
                     className="block text-sm font-medium text-neutral-800 dark:text-neutral-200"
                   >
-                    Cultivo
+                    Especie
                   </label>
                   <select
                     id="new_crop_id"
@@ -439,7 +446,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
               ) : (
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                    Cultivo
+                    Especie
                   </p>
                   <p className="mt-1 text-sm text-neutral-700 dark:text-neutral-300">
                     {cropLabelDisplay}
@@ -484,6 +491,11 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                       className="text-center"
                       id="create_season_type"
                       legend="Zafra"
+                      legendAccessory={
+                        <HelpInfoDialog label="Aclaración sobre Zafra">
+                          <p>Aclaración de prueba</p>
+                        </HelpInfoDialog>
+                      }
                       value={createSeasonType}
                       onChange={setCreateSeasonType}
                       optionLeft={{ value: "primavera", label: "Primavera" }}
@@ -508,9 +520,14 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                 </>
               ) : (
                 <div className="mx-auto w-full max-w-sm text-center">
-                  <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                    Zafra
-                  </p>
+                  <div className="flex items-center justify-center gap-1.5">
+                    <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                      Zafra
+                    </p>
+                    <HelpInfoDialog label="Aclaración sobre Zafra">
+                      <p>Aclaración de prueba</p>
+                    </HelpInfoDialog>
+                  </div>
                   <p className="mt-1 text-sm text-neutral-700 dark:text-neutral-300">
                     {seasonTypeLabel(seasonTypeDisplay)}{" "}
                     {seasonYearDisplay}
@@ -707,7 +724,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                 ))}
                 <li className="px-3 py-3">
                   <AddLineCircleButton
-                    label="Agregar operación de laboreo"
+                    caption="Agregar herramienta"
                     onClick={() =>
                       setTillageLines((prev) => [
                         ...prev,
@@ -728,10 +745,19 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
         <FormSection title="3. Siembra e insumos">
           <div className="flex w-full min-w-0 flex-col gap-4 sm:flex-row sm:flex-nowrap sm:items-end sm:gap-5">
             <div className="w-full max-w-xs shrink-0 sm:w-44 md:w-48">
-              <label className="block text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                Densidad de siembra (kg/ha)
-              </label>
+              <div className="flex items-center gap-1.5">
+                <label
+                  htmlFor="seeding_rate_kg_ha"
+                  className="text-sm font-medium text-neutral-800 dark:text-neutral-200"
+                >
+                  Densidad de siembra (kg/ha)
+                </label>
+                <HelpInfoDialog label="Aclaración sobre densidad de siembra">
+                  <p>Densidad de siembra promedio de todos los semilleros.</p>
+                </HelpInfoDialog>
+              </div>
               <input
+                id="seeding_rate_kg_ha"
                 type="number"
                 min={0.0001}
                 step="any"
@@ -875,7 +901,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                 })}
                 <li className="px-3 py-3">
                   <AddLineCircleButton
-                    label="Agregar fertilizante"
+                    caption="Agregar fertilizante"
                     onClick={() =>
                       setLines((prev) => [
                         ...prev,
@@ -1015,10 +1041,24 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
             />
             {showTransport ? (
               <div>
-                <label className="block text-sm text-neutral-800 dark:text-neutral-200">
-                  Distancia total aproximada (km)
-                </label>
+                <div className="flex items-center gap-1.5">
+                  <label
+                    htmlFor="transport_total_km"
+                    className="text-sm text-neutral-800 dark:text-neutral-200"
+                  >
+                    Distancia total aproximada (km)
+                  </label>
+                  <HelpInfoDialog label="Aclaración sobre distancia de transporte de semilla">
+                    <p>
+                      ¿Qué distancia promedio expresada en km se maneja, asumiendo el
+                      recorrido que hace la semilla desde el campo hasta el destino final
+                      en donde la semilla se encontrará seca, limpia, embolsada y
+                      etiquetada?
+                    </p>
+                  </HelpInfoDialog>
+                </div>
                 <input
+                  id="transport_total_km"
                   type="number"
                   min={0}
                   step="any"
@@ -1079,7 +1119,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                 if (props.mode === "create") {
                   const cid = Number(createCropId);
                   if (!Number.isInteger(cid) || cid < 1) {
-                    setSaveError("Elegí un cultivo.");
+                    setSaveError("Elegí una especie.");
                     return;
                   }
                   const result = await createDraftQuestionnaire(
@@ -1122,7 +1162,7 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                 if (props.mode === "create") {
                   const cid = Number(createCropId);
                   if (!Number.isInteger(cid) || cid < 1) {
-                    setSaveError("Elegí un cultivo.");
+                    setSaveError("Elegí una especie.");
                     return;
                   }
                   const result = await createAndSubmitQuestionnaire(

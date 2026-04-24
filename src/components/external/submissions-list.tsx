@@ -44,7 +44,7 @@ export function SubmissionsList({
             <thead className="border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-white">
               <tr>
                 <th className="px-3 py-2 font-medium text-neutral-700 dark:text-neutral-300">
-                  Cultivo
+                  Especie
                 </th>
                 <th className="px-3 py-2 font-medium text-neutral-700 dark:text-neutral-300">
                   Temporada

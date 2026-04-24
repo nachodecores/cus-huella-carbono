@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { InvalidToken } from "@/components/external/invalid-token";
+import { FormIntroShell } from "@/components/external/form-intro-shell";
 import {
   type DraftSubmissionRow,
   type FertilizerLineRow,
@@ -94,19 +95,23 @@ export default async function NewSubmissionPage({ params }: PageProps) {
     ...emptyNewDraftSubmissionPayload(),
   };
 
+  const headerTitle = `Calculadora de Huella de Carbono - ${company.name}`;
+
   return (
-    <QuestionnaireDraftForm
-      mode="create"
-      token={token}
-      companyName={company.name}
-      basePath={basePath}
-      headingTitle="Calculadora de Huella de Carbono"
-      cropOptions={crops}
-      initialSubmission={initialSubmission}
-      initialFertilizerLines={[] as FertilizerLineRow[]}
-      initialTillageLines={[] as TillageLineRow[]}
-      fertilizerCatalog={fertRows}
-      tillageToolCatalog={tillageToolRows}
-    />
+    <FormIntroShell headerTitle={headerTitle}>
+      <QuestionnaireDraftForm
+        mode="create"
+        token={token}
+        companyName={company.name}
+        basePath={basePath}
+        headingTitle="Calculadora de Huella de Carbono"
+        cropOptions={crops}
+        initialSubmission={initialSubmission}
+        initialFertilizerLines={[] as FertilizerLineRow[]}
+        initialTillageLines={[] as TillageLineRow[]}
+        fertilizerCatalog={fertRows}
+        tillageToolCatalog={tillageToolRows}
+      />
+    </FormIntroShell>
   );
 }

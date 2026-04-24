@@ -3,6 +3,8 @@
  */
 export const GLOBAL_PARAM_KEYS = {
   dieselKgCo2ePerL: "diesel_kg_co2e_per_l",
+  /** Diesel L/ha for one implicit sowing pass (not a tillage_tools row). */
+  sowingDieselLitersPerHa: "sowing_diesel_liters_per_ha",
   fallowPassKgCo2ePerHaPerPass: "fallow_pass_kg_co2e_per_ha_per_pass",
   herbicidePassKgCo2ePerHaPerPass: "herbicide_pass_kg_co2e_per_ha_per_pass",
   fungicidePassKgCo2ePerHaPerPass: "fungicide_pass_kg_co2e_per_ha_per_pass",

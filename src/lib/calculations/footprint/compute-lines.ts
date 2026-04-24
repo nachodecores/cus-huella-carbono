@@ -159,6 +159,27 @@ export function computeFootprintLines(input: ComputeInput): {
     }
   }
 
+  // --- Sowing (implicit diesel L/ha; always one operation, not in tillage_tools UI) ---
+  const sowingLPerHa = g(ctx, GLOBAL_PARAM_KEYS.sowingDieselLitersPerHa);
+  const sowingLPerHaSafe = Math.max(
+    0,
+    Number.isFinite(sowingLPerHa) ? sowingLPerHa : 0,
+  );
+  const sowingDieselLiters = areaHa * sowingLPerHaSafe;
+  const kgSowing = sowingDieselLiters * dieselCo2PerL;
+  lines.push({
+    category: "tillage",
+    sort_order: sort++,
+    label: "Siembra (diesel, implícita)",
+    quantity: sowingDieselLiters,
+    quantity_unit: "L diesel (estimado)",
+    emission_factor: dieselCo2PerL,
+    emission_factor_unit: "kg CO₂e / L diesel",
+    kg_co2e: kgSowing,
+    submission_fertilizer_line_id: null,
+    submission_tillage_line_id: null,
+  });
+
   // --- Fertilizers ---
   if (s.fertilizers_used) {
     for (const fl of input.fertilizerLines) {

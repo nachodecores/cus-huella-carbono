@@ -234,6 +234,14 @@ VALUES
     'kg_co2e_per_tonne_km',
     'TEMP placeholder (transport mass rule: seed_produced_kg in app)',
     14
+  ),
+  (
+    'a2000000-0000-4000-8000-000000000001'::uuid,
+    'sowing_diesel_liters_per_ha',
+    0,
+    'L_per_ha',
+    'Diesel siembra mecánica por ha (una operación; línea tillage implícita, no en listado de herramientas).',
+    15
   )
 ON CONFLICT (assumption_set_id, param_key) DO NOTHING;
 

@@ -76,7 +76,7 @@ export function SubmissionReadonlySummary({
           {companyName}
         </p>
         <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-          {submittedAt ? "Cultivo enviado" : "Revisión antes de enviar"}
+          {submittedAt ? "Especie enviada" : "Revisión antes de enviar"}
         </h1>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
           {cropLabel} · {seasonTypeLabel(seasonType)} {seasonYear}
@@ -94,7 +94,7 @@ export function SubmissionReadonlySummary({
 
       <ExternalSectionCard title="1. Datos generales y resultados productivos">
         <dl className="space-y-2 p-4 text-sm text-neutral-800 dark:text-neutral-200">
-        <Row label="Cultivo" value={cropLabel} />
+        <Row label="Especie" value={cropLabel} />
         <Row
           label="Zafra"
           value={seasonTypeLabel(seasonType)}

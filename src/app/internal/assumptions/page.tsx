@@ -53,6 +53,14 @@ export default async function InternalAssumptionsIndexPage() {
             Laboreo (diesel por ha y pasada)
           </Link>
         </li>
+        <li>
+          <Link
+            href="/internal/modelo-huella"
+            className="text-palette-brand underline-offset-2 hover:underline"
+          >
+            Modelo de cálculo (fórmulas y orden)
+          </Link>
+        </li>
       </ul>
 
       <p className="mt-10 text-sm">

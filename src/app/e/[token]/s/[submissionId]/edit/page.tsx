@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { FormIntroShell } from "@/components/external/form-intro-shell";
 import { InvalidToken } from "@/components/external/invalid-token";
 import {
   type DraftSubmissionRow,
@@ -200,22 +201,25 @@ export default async function SubmissionEditPage({ params }: PageProps) {
   const cropLabel = crop?.label ?? "—";
 
   const basePath = `/e/${encodeURIComponent(token)}`;
+  const headerTitle = `Cuestionario (borrador) - ${company.name}`;
 
   return (
-    <QuestionnaireDraftForm
-      mode="edit"
-      token={token}
-      submissionId={submissionId}
-      companyName={company.name}
-      cropLabel={cropLabel}
-      seasonType={row.season_type as "primavera" | "otono"}
-      seasonYear={Number(row.season_year)}
-      basePath={basePath}
-      initialSubmission={initialSubmission}
-      initialFertilizerLines={initialLines}
-      initialTillageLines={initialTillageLines}
-      fertilizerCatalog={fertRows}
-      tillageToolCatalog={tillageToolRows}
-    />
+    <FormIntroShell headerTitle={headerTitle}>
+      <QuestionnaireDraftForm
+        mode="edit"
+        token={token}
+        submissionId={submissionId}
+        companyName={company.name}
+        cropLabel={cropLabel}
+        seasonType={row.season_type as "primavera" | "otono"}
+        seasonYear={Number(row.season_year)}
+        basePath={basePath}
+        initialSubmission={initialSubmission}
+        initialFertilizerLines={initialLines}
+        initialTillageLines={initialTillageLines}
+        fertilizerCatalog={fertRows}
+        tillageToolCatalog={tillageToolRows}
+      />
+    </FormIntroShell>
   );
 }

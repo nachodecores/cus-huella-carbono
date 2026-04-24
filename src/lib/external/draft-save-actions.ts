@@ -171,7 +171,7 @@ function validateSection1(
   seasonYear: number,
 ): string | null {
   if (!Number.isInteger(cropId) || cropId < 1) {
-    return "Elegí un cultivo.";
+    return "Elegí una especie.";
   }
   if (seasonType !== "primavera" && seasonType !== "otono") {
     return "Elegí el tipo de temporada.";
@@ -298,7 +298,7 @@ async function persistNewDraftSubmission(
     if (insErr.code === "23505") {
       return {
         error:
-          "Ya existe un envío para ese cultivo, temporada (primavera/otoño) y año. Elegí otra combinación o abrí el borrador existente.",
+          "Ya existe un envío para esa especie, temporada (primavera/otoño) y año. Elegí otra combinación o abrí el borrador existente.",
       };
     }
     return { error: insErr.message || "No se pudo crear el borrador." };

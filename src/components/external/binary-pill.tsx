@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 type Option<T> = { value: T; label: string };
 
 export type BinaryPillProps<T extends string | boolean> = {
@@ -10,6 +12,8 @@ export type BinaryPillProps<T extends string | boolean> = {
   className?: string;
   /** "inline": leyenda y control en la misma fila (con wrap si no entra). */
   layout?: "stacked" | "inline";
+  /** Contenido a la derecha de la leyenda (p. ej. ayuda contextual). */
+  legendAccessory?: ReactNode;
 };
 
 /**
@@ -24,6 +28,7 @@ export function BinaryPill<T extends string | boolean>({
   optionRight,
   className,
   layout = "stacked",
+  legendAccessory,
 }: BinaryPillProps<T>) {
   const legendId = `${id}-legend`;
   const inline = layout === "inline";
@@ -49,11 +54,19 @@ export function BinaryPill<T extends string | boolean>({
         className={[
           "text-sm font-medium text-neutral-800 dark:text-neutral-200",
           inline ? "shrink-0" : "",
+          legendAccessory ? "flex items-center justify-center gap-1.5" : "",
         ]
           .filter(Boolean)
           .join(" ")}
       >
-        {legend}
+        {legendAccessory ? (
+          <>
+            <span>{legend}</span>
+            {legendAccessory}
+          </>
+        ) : (
+          legend
+        )}
       </legend>
       <div
         className={[

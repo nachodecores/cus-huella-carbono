@@ -3,7 +3,11 @@ import Link from "next/link";
 const linkClass =
   "text-sm text-neutral-600 underline-offset-2 hover:underline dark:text-neutral-400";
 
-export function AssumptionsNav({ current }: { current: "home" | "globals" | "fertilizers" | "tillage" }) {
+export function AssumptionsNav({
+  current,
+}: {
+  current: "home" | "globals" | "fertilizers" | "tillage" | "modelo";
+}) {
   return (
     <nav className="flex flex-wrap gap-x-4 gap-y-1 border-b border-neutral-200 pb-3 dark:border-neutral-700">
       <Link href="/internal/assumptions" className={linkClass}>
@@ -17,6 +21,9 @@ export function AssumptionsNav({ current }: { current: "home" | "globals" | "fer
       </Link>
       <Link href="/internal/assumptions/tillage" className={linkClass}>
         {current === "tillage" ? "· Laboreo" : "Laboreo"}
+      </Link>
+      <Link href="/internal/modelo-huella" className={linkClass}>
+        {current === "modelo" ? "· Modelo" : "Modelo"}
       </Link>
     </nav>
   );
