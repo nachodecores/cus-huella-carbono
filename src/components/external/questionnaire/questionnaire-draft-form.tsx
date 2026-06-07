@@ -599,6 +599,15 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
         <FormSection title="2. Barbecho y suelo">
           <ConditionalQuestionGroup>
             <YesNo
+              id="cover_crop_used"
+              label="¿Realizó un cultivo de cobertura?"
+              value={sub.cover_crop_used}
+              onChange={(v) => updateSub("cover_crop_used", v)}
+            />
+          </ConditionalQuestionGroup>
+
+          <ConditionalQuestionGroup>
+            <YesNo
               id="fallow_used"
               label="¿Hubo barbecho químico?"
               value={sub.fallow_used}
@@ -920,6 +929,15 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
         </FormSection>
 
         <FormSection title="4. Protección del cultivo">
+          <ConditionalQuestionGroup>
+            <YesNo
+              id="crop_protection_bioinput_used"
+              label="¿Utilizó algún bio-insumo para la protección del cultivo?"
+              value={sub.crop_protection_bioinput_used}
+              onChange={(v) => updateSub("crop_protection_bioinput_used", v)}
+            />
+          </ConditionalQuestionGroup>
+
           <div>
             <label
               htmlFor="post_emergence_herbicide_passes"

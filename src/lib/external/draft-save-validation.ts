@@ -23,6 +23,7 @@ export type SaveDraftPayload = {
   area_cultivated_ha: number | null;
   gross_yield_kg_ha: number | null;
   clean_yield_kg_ha: number | null;
+  cover_crop_used: boolean;
   fallow_used: boolean;
   fallow_spray_passes: number | null;
   tillage_used: boolean;
@@ -31,6 +32,7 @@ export type SaveDraftPayload = {
   inoculant_used: boolean;
   seed_treatment_used: boolean;
   fertilizers_used: boolean;
+  crop_protection_bioinput_used: boolean;
   post_emergence_herbicide_passes: number;
   fungicide_passes: number;
   insecticide_passes: number;
@@ -44,9 +46,11 @@ export type SaveDraftPayload = {
 };
 
 const GATE_KEYS = [
+  "cover_crop_used",
   "fallow_used",
   "tillage_used",
   "fertilizers_used",
+  "crop_protection_bioinput_used",
   "conditioning_used",
   "drying_used",
   "transport_used",

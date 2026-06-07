@@ -54,10 +54,12 @@ export type SubmissionRow = {
   area_cultivated_ha: number | null;
   seed_produced_kg: number | null;
   clean_yield_kg_ha: number | null;
+  cover_crop_used: boolean;
   fallow_used: boolean;
   fallow_spray_passes: number | null;
   tillage_used: boolean;
   fertilizers_used: boolean;
+  crop_protection_bioinput_used: boolean;
   post_emergence_herbicide_passes: number;
   fungicide_passes: number;
   insecticide_passes: number;

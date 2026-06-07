@@ -30,6 +30,6 @@ export const FORM_INTRO_SLIDES: FormIntroSlide[] = [
   },
   {
     title: "",
-    body: "Tiempo estimado: 20 minutos por especie.",
+    body: "Tiempo estimado: 5 minutos por especie.",
   },
 ];

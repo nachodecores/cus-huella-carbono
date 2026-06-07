@@ -17,6 +17,7 @@ export function mapRowToSubmissionFootprintInput(
       row.clean_yield_kg_ha == null || row.clean_yield_kg_ha === ""
         ? null
         : Number(row.clean_yield_kg_ha),
+    cover_crop_used: Boolean(row.cover_crop_used),
     fallow_used: Boolean(row.fallow_used),
     fallow_spray_passes:
       row.fallow_spray_passes == null
@@ -24,6 +25,7 @@ export function mapRowToSubmissionFootprintInput(
         : Number(row.fallow_spray_passes),
     tillage_used: Boolean(row.tillage_used),
     fertilizers_used: Boolean(row.fertilizers_used),
+    crop_protection_bioinput_used: Boolean(row.crop_protection_bioinput_used),
     post_emergence_herbicide_passes: Number(
       row.post_emergence_herbicide_passes ?? 0,
     ),

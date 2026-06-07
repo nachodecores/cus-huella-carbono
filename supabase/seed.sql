@@ -4,14 +4,20 @@
 -- (false + zero lines, or true + ≥1 valid line).
 
 INSERT INTO crops (id, label) VALUES
-  (1, 'Raigrás'),
+  (1, 'Raigrás anual'),
   (2, 'Festuca'),
   (3, 'Lotus'),
   (4, 'Trébol Rojo'),
   (5, 'Arroz'),
   (6, 'Soja'),
   (7, 'Maíz'),
-  (8, 'Achicoria')
+  (8, 'Achicoria'),
+  (9, 'Sorgo'),
+  (10, 'Vicia'),
+  (11, 'Moha'),
+  (12, 'Alfalfa'),
+  (13, 'Sudán'),
+  (14, 'Raigrás perenne')
 ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(
@@ -30,7 +36,8 @@ INSERT INTO fertilizers (id, label, application_unit) VALUES
   (8, 'Nitrato de amonio', 'kg_ha'),
   (9, 'Mezcla NPK (fórmula comercial)', 'kg_ha'),
   (10, 'Fertilizante líquido', 'l_ha'),
-  (11, 'Cal agrícola / enmienda calcárea', 'kg_ha')
+  (11, 'Cal agrícola / enmienda calcárea', 'kg_ha'),
+  (12, 'Bio-fertilizante', 'l_ha')
 ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(

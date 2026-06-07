@@ -129,6 +129,10 @@ export function SubmissionReadonlySummary({
 
       <ExternalSectionCard title="2. Barbecho y suelo">
         <dl className="space-y-2 p-4 text-sm text-neutral-800 dark:text-neutral-200">
+        <Row
+          label="¿Realizó un cultivo de cobertura?"
+          value={yn(payload.cover_crop_used)}
+        />
         <Row label="¿Hubo barbecho químico?" value={yn(payload.fallow_used)} />
         {payload.fallow_used ? (
           <Row
@@ -209,6 +213,10 @@ export function SubmissionReadonlySummary({
 
       <ExternalSectionCard title="4. Protección del cultivo">
         <dl className="space-y-2 p-4 text-sm text-neutral-800 dark:text-neutral-200">
+        <Row
+          label="¿Utilizó algún bio-insumo para la protección del cultivo?"
+          value={yn(payload.crop_protection_bioinput_used)}
+        />
         <Row
           label="Aplicaciones con herbicida post-emergente"
           value={String(payload.post_emergence_herbicide_passes)}

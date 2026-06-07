@@ -91,6 +91,7 @@ export async function submitFinalQuestionnaire(
       seed_produced_kg: seedProducedKg,
       gross_yield_kg_ha: sanitized.gross_yield_kg_ha,
       clean_yield_kg_ha: sanitized.clean_yield_kg_ha,
+      cover_crop_used: sanitized.cover_crop_used,
       fallow_used: sanitized.fallow_used,
       fallow_spray_passes: sanitized.fallow_spray_passes,
       tillage_used: sanitized.tillage_used,
@@ -99,6 +100,7 @@ export async function submitFinalQuestionnaire(
       inoculant_used: sanitized.inoculant_used,
       seed_treatment_used: sanitized.seed_treatment_used,
       fertilizers_used: sanitized.fertilizers_used,
+      crop_protection_bioinput_used: sanitized.crop_protection_bioinput_used,
       post_emergence_herbicide_passes:
         sanitized.post_emergence_herbicide_passes,
       fungicide_passes: sanitized.fungicide_passes,

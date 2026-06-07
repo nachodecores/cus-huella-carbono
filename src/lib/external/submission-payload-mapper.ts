@@ -75,6 +75,7 @@ export function mapDbSubmissionToSavePayload(
       row.gross_yield_kg_ha == null ? null : Number(row.gross_yield_kg_ha),
     clean_yield_kg_ha:
       row.clean_yield_kg_ha == null ? null : Number(row.clean_yield_kg_ha),
+    cover_crop_used: Boolean(row.cover_crop_used),
     fallow_used: Boolean(row.fallow_used),
     fallow_spray_passes:
       row.fallow_spray_passes == null
@@ -87,6 +88,7 @@ export function mapDbSubmissionToSavePayload(
     inoculant_used: Boolean(row.inoculant_used),
     seed_treatment_used: Boolean(row.seed_treatment_used),
     fertilizers_used: Boolean(row.fertilizers_used),
+    crop_protection_bioinput_used: Boolean(row.crop_protection_bioinput_used),
     post_emergence_herbicide_passes: Number(
       row.post_emergence_herbicide_passes ?? 0,
     ),
@@ -109,6 +111,7 @@ export function emptyNewDraftSubmissionPayload(): SaveDraftPayload {
     area_cultivated_ha: null,
     gross_yield_kg_ha: null,
     clean_yield_kg_ha: null,
+    cover_crop_used: false,
     fallow_used: false,
     fallow_spray_passes: null,
     tillage_used: false,
@@ -117,6 +120,7 @@ export function emptyNewDraftSubmissionPayload(): SaveDraftPayload {
     inoculant_used: false,
     seed_treatment_used: false,
     fertilizers_used: false,
+    crop_protection_bioinput_used: false,
     post_emergence_herbicide_passes: 0,
     fungicide_passes: 0,
     insecticide_passes: 0,
