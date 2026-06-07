@@ -491,11 +491,6 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                       className="text-center"
                       id="create_season_type"
                       legend="Zafra"
-                      legendAccessory={
-                        <HelpInfoDialog label="Aclaración sobre Zafra">
-                          <p>Aclaración de prueba</p>
-                        </HelpInfoDialog>
-                      }
                       value={createSeasonType}
                       onChange={setCreateSeasonType}
                       optionLeft={{ value: "primavera", label: "Primavera" }}
@@ -520,14 +515,9 @@ export function QuestionnaireDraftForm(props: QuestionnaireDraftFormProps) {
                 </>
               ) : (
                 <div className="mx-auto w-full max-w-sm text-center">
-                  <div className="flex items-center justify-center gap-1.5">
-                    <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                      Zafra
-                    </p>
-                    <HelpInfoDialog label="Aclaración sobre Zafra">
-                      <p>Aclaración de prueba</p>
-                    </HelpInfoDialog>
-                  </div>
+                  <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                    Zafra
+                  </p>
                   <p className="mt-1 text-sm text-neutral-700 dark:text-neutral-300">
                     {seasonTypeLabel(seasonTypeDisplay)}{" "}
                     {seasonYearDisplay}

@@ -62,47 +62,47 @@ INSERT INTO companies (id, name, access_token) VALUES
   (
     'a1000000-0000-4000-8000-000000000001',
     'Agrofuturo',
-    'mvp_dev_agrofuturo_7a1c9e2f4b608d3a'
+    'prod_agrofuturo_b58b803d938dfdb668872b838ab0e7f7'
   ),
   (
     'a1000000-0000-4000-8000-000000000002',
     'Gentos',
-    'mvp_dev_gentos_8b2d0f3a5c719e4b'
+    'prod_gentos_46d2ac7bd10df4eb6fcf040f11f26cbf'
   ),
   (
     'a1000000-0000-4000-8000-000000000003',
     'Procampo',
-    'mvp_dev_procampo_9c3e1a4b6d820f5c'
+    'prod_procampo_92e2cad20fa5dbcb0bda7ff7f5933eaf'
   ),
   (
     'a1000000-0000-4000-8000-000000000004',
     'DLF',
-    'mvp_dev_dlf_0d4f2b5c7e931a6d'
+    'prod_dlf_85e6ec1e16d867b150a60ff94ad890a4'
   ),
   (
     'a1000000-0000-4000-8000-000000000005',
     'Virö',
-    'mvp_dev_viro_1e5a3c6d8f042b7e'
+    'prod_viro_b68f0df78ab8c45ed3809f087e62eea0'
   ),
   (
     'a1000000-0000-4000-8000-000000000006',
     'DMK Semillas',
-    'mvp_dev_dmk_semillas_2f6b4d7e9a153c8f'
+    'prod_dmk_semillas_a54525bd1cf1f7c06706e7c402e1c06f'
   ),
   (
     'a1000000-0000-4000-8000-000000000007',
     'Calvase',
-    'mvp_dev_calvase_3a7c5e8f0b264d9a'
+    'prod_calvase_e8eac1d4d41b48c79dee47a679830e86'
   ),
   (
     'a1000000-0000-4000-8000-000000000008',
     'Fadisol',
-    'mvp_dev_fadisol_4b8d6f9a1c375e0b'
+    'prod_fadisol_c4e0ad585f1c642c9aa43998a0825c03'
   ),
   (
     'a1000000-0000-4000-8000-000000000009',
     'Germinar',
-    'mvp_dev_germinar_5c9e7a0b2d486f1c'
+    'prod_germinar_1dd9ab0ec38c0561a1e6e30e9a7bfad9'
   )
 ON CONFLICT (id) DO NOTHING;
 
