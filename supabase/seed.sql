@@ -148,6 +148,11 @@ INSERT INTO companies (id, name, access_token) VALUES
     'a1000000-0000-4000-8000-000000000012',
     'Corteva',
     'prod_corteva_5cec48dc2ed2c2d5f6de39b8edb6dd01'
+  ),
+  (
+    'a1000000-0000-4000-8000-000000000013',
+    'Prueba (interno)',
+    'test_prueba_b9a3b6994461855c1f4911113a00e67d'
   )
 ON CONFLICT (id) DO NOTHING;
 

@@ -301,3 +301,12 @@ CREATE TABLE calculation_line_item (
 
 CREATE INDEX idx_calculation_line_item_run ON calculation_line_item (calculation_run_id);
 CREATE INDEX idx_calculation_line_item_category ON calculation_line_item (calculation_run_id, category);
+
+CREATE OR REPLACE VIEW crop_season_submissions_v AS
+SELECT
+  c.name AS company_name,
+  k.label AS crop_label,
+  s.*
+FROM crop_season_submissions s
+JOIN companies c ON c.id = s.company_id
+JOIN crops k ON k.id = s.crop_id;
