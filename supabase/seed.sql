@@ -153,6 +153,11 @@ INSERT INTO companies (id, name, access_token) VALUES
     'a1000000-0000-4000-8000-000000000013',
     'Prueba (interno)',
     'test_prueba_b9a3b6994461855c1f4911113a00e67d'
+  ),
+  (
+    'a1000000-0000-4000-8000-000000000014',
+    'Nufarm',
+    'prod_nufarm_8eb4cabc95b9350bd197c6e0e6053b37'
   )
 ON CONFLICT (id) DO NOTHING;
 
