@@ -123,7 +123,7 @@ export default async function InternalFootprintPage({ params }: PageProps) {
     ? await supabase
         .from("calculation_line_item")
         .select(
-          "id, sort_order, label, quantity, quantity_unit, emission_factor, emission_factor_unit, kg_co2e",
+          "id, category, sort_order, label, quantity, quantity_unit, emission_factor, emission_factor_unit, kg_co2e",
         )
         .eq("calculation_run_id", runId)
         .order("sort_order", { ascending: true })
@@ -318,6 +318,10 @@ export default async function InternalFootprintPage({ params }: PageProps) {
             <h3 className="text-xs font-semibold uppercase text-neutral-500 dark:text-neutral-400">
               Desglose por línea
             </h3>
+            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+              La línea de carbono del suelo (en cursiva) es informativa y no está incluida en
+              el total.
+            </p>
             <table className="mt-2 w-full min-w-[28rem] border-collapse text-left text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 dark:border-neutral-600">
@@ -331,7 +335,11 @@ export default async function InternalFootprintPage({ params }: PageProps) {
                 {lineItems.map((row) => (
                   <tr
                     key={row.id as string}
-                    className="border-b border-neutral-100 dark:border-neutral-800"
+                    className={`border-b border-neutral-100 dark:border-neutral-800 ${
+                      row.category === "soil_carbon"
+                        ? "italic text-neutral-500 dark:text-neutral-400"
+                        : ""
+                    }`}
                   >
                     <td className="py-1.5 pr-2">{row.label}</td>
                     <td className="py-1.5 pr-2">

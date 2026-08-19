@@ -474,6 +474,11 @@ export function computeFootprintLines(input: ComputeInput): {
     }
   }
 
-  const total_kg_co2e = lines.reduce((acc, row) => acc + row.kg_co2e, 0);
+  // `soil_carbon` es informativo (remociones/pérdidas de carbono del suelo):
+  // requiere datos de historial de manejo del campo que hoy no relevamos, así
+  // que se muestra como línea aparte pero no se suma al total de la corrida.
+  const total_kg_co2e = lines
+    .filter((row) => row.category !== "soil_carbon")
+    .reduce((acc, row) => acc + row.kg_co2e, 0);
   return { lines, total_kg_co2e };
 }

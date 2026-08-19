@@ -60,7 +60,17 @@ export default function InternalModeloHuellaPage() {
             Total
           </h2>
           <p className="mt-2 font-mono text-neutral-700 dark:text-neutral-300">
-            total_kg_CO₂e = Σ (kg_CO₂e de cada línea generada)
+            total_kg_CO₂e = Σ (kg_CO₂e de cada línea generada, excepto{" "}
+            <code className="font-mono text-xs">soil_carbon</code>)
+          </p>
+          <p className="mt-2 text-neutral-700 dark:text-neutral-300">
+            La línea <code className="font-mono text-xs">soil_carbon</code> (remociones o
+            pérdidas de carbono del suelo) se calcula y se muestra en el desglose, pero{" "}
+            <strong>no se suma al total</strong>: requiere datos de historial de manejo del
+            campo (cuándo cambió el uso/manejo de suelo) que hoy no se relevan en el
+            cuestionario, y su magnitud (miles de kg CO₂e/ha) puede distorsionar por completo
+            un total pensado para emisiones de proceso. Se reporta aparte, como es habitual en
+            estándares de huella para remociones de carbono del suelo.
           </p>
         </div>
 
@@ -275,11 +285,11 @@ export default function InternalModeloHuellaPage() {
             </p>
             <p className="mt-2 text-neutral-700 dark:text-neutral-300">
               El signo se invierte a propósito: manejo sustentable (factores &gt; 1) da
-              secuestro de carbono → línea <strong>negativa</strong> (crédito, resta del
-              total). Manejo degradante (factores &lt; 1) da pérdida de carbono → línea
-              positiva (emisión). Es la única categoría que puede dar{" "}
-              <code className="font-mono text-xs">kg_co2e</code> negativo; el total de la
-              corrida puede ser negativo si el secuestro supera al resto de las emisiones.
+              secuestro de carbono → línea <strong>negativa</strong> (crédito). Manejo
+              degradante (factores &lt; 1) da pérdida de carbono → línea positiva (emisión).
+              Es la única categoría que puede dar <code className="font-mono text-xs">kg_co2e</code>{" "}
+              negativo — pero, como se indica arriba, esta línea es informativa y{" "}
+              <strong>no se incluye en <code className="font-mono text-xs">total_kg_co2e</code></strong>.
             </p>
           </li>
         </ol>
