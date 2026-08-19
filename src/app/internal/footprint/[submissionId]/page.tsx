@@ -370,10 +370,10 @@ export default async function InternalFootprintPage({ params }: PageProps) {
 
       <p className="mt-10 text-sm">
         <Link
-          href="/"
+          href="/internal/submissions"
           className="text-neutral-600 underline dark:text-neutral-400"
         >
-          ← Inicio
+          ← Volver al listado
         </Link>
       </p>
     </div>

@@ -91,15 +91,26 @@ export async function saveFertilizerFactors(formData: FormData) {
       );
     }
 
+    const rawN = formData.get(`n_${fertilizerId}`);
+    const nContent = parseNonNegNumeric(rawN);
+    if (nContent === null) {
+      redirectWithError(
+        "/internal/assumptions/fertilizers",
+        `Contenido de N no válido para fertilizante id ${fertilizerId}: use un número finito ≥ 0.`,
+      );
+    }
+
     const payload =
       appUnit === "kg_ha"
         ? {
             kg_co2e_per_kg_product: n,
             kg_co2e_per_l_product: null as number | null,
+            kg_n_per_unit_product: nContent,
           }
         : {
             kg_co2e_per_kg_product: null as number | null,
             kg_co2e_per_l_product: n,
+            kg_n_per_unit_product: nContent,
           };
 
     const { error } = await supabase

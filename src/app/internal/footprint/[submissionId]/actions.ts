@@ -20,6 +20,7 @@ export async function runInternalFootprintCalculation(
 
   const result = await calculateAndPersistSubmissionFootprint(submissionId);
   revalidatePath(`/internal/footprint/${submissionId}`);
+  revalidatePath("/internal/submissions");
 
   if (result.ok) {
     return { ok: true };

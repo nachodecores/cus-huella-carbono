@@ -225,6 +225,7 @@ CREATE TABLE assumption_fertilizer_factor (
   fertilizer_id smallint NOT NULL REFERENCES fertilizers (id) ON DELETE RESTRICT,
   kg_co2e_per_kg_product numeric,
   kg_co2e_per_l_product numeric,
+  kg_n_per_unit_product numeric,
   notes text,
   created_at timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT assumption_fertilizer_factor_unique_pair UNIQUE (assumption_set_id, fertilizer_id),
@@ -235,6 +236,9 @@ CREATE TABLE assumption_fertilizer_factor (
   CONSTRAINT assumption_fertilizer_factor_nonneg CHECK (
     COALESCE(kg_co2e_per_kg_product, 0) >= 0
     AND COALESCE(kg_co2e_per_l_product, 0) >= 0
+  ),
+  CONSTRAINT assumption_fertilizer_factor_n_nonneg CHECK (
+    kg_n_per_unit_product IS NULL OR kg_n_per_unit_product >= 0
   )
 );
 
@@ -261,8 +265,7 @@ CREATE TABLE calculation_run (
   total_kg_co2e numeric,
   error_message text,
   created_at timestamptz NOT NULL DEFAULT now(),
-  completed_at timestamptz,
-  CONSTRAINT calculation_run_total_nonneg CHECK (total_kg_co2e IS NULL OR total_kg_co2e >= 0)
+  completed_at timestamptz
 );
 
 CREATE INDEX idx_calculation_run_submission ON calculation_run (submission_id);
@@ -293,10 +296,14 @@ CREATE TABLE calculation_line_item (
       'drying',
       'conditioning',
       'transport',
+      'soil_n2o',
+      'soil_carbon',
       'other'
     )
   ),
-  CONSTRAINT calculation_line_item_kg_co2e_nonneg CHECK (kg_co2e >= 0)
+  CONSTRAINT calculation_line_item_kg_co2e_nonneg CHECK (
+    kg_co2e >= 0 OR category = 'soil_carbon'
+  )
 );
 
 CREATE INDEX idx_calculation_line_item_run ON calculation_line_item (calculation_run_id);

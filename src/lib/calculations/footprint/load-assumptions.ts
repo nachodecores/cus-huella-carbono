@@ -43,7 +43,9 @@ export async function loadDefaultAssumptionContext(): Promise<LoadAssumptionsRes
 
   const { data: fertRows, error: fErr } = await supabase
     .from("assumption_fertilizer_factor")
-    .select("fertilizer_id, kg_co2e_per_kg_product, kg_co2e_per_l_product")
+    .select(
+      "fertilizer_id, kg_co2e_per_kg_product, kg_co2e_per_l_product, kg_n_per_unit_product",
+    )
     .eq("assumption_set_id", assumptionSetId);
 
   if (fErr) {
@@ -52,7 +54,11 @@ export async function loadDefaultAssumptionContext(): Promise<LoadAssumptionsRes
 
   const fertilizerFactors = new Map<
     number,
-    { kgPerKg: number | null; kgPerL: number | null }
+    {
+      kgPerKg: number | null;
+      kgPerL: number | null;
+      kgNPerUnit: number | null;
+    }
   >();
   for (const row of fertRows ?? []) {
     const id = Number(row.fertilizer_id);
@@ -65,6 +71,10 @@ export async function loadDefaultAssumptionContext(): Promise<LoadAssumptionsRes
         row.kg_co2e_per_l_product == null
           ? null
           : Number(row.kg_co2e_per_l_product),
+      kgNPerUnit:
+        row.kg_n_per_unit_product == null
+          ? null
+          : Number(row.kg_n_per_unit_product),
     });
   }
 

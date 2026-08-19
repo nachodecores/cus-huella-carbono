@@ -6,10 +6,19 @@ const linkClass =
 export function AssumptionsNav({
   current,
 }: {
-  current: "home" | "globals" | "fertilizers" | "tillage" | "modelo";
+  current:
+    | "home"
+    | "globals"
+    | "fertilizers"
+    | "tillage"
+    | "modelo"
+    | "submissions";
 }) {
   return (
     <nav className="flex flex-wrap gap-x-4 gap-y-1 border-b border-neutral-200 pb-3 dark:border-neutral-700">
+      <Link href="/internal/submissions" className={linkClass}>
+        {current === "submissions" ? "· Submissions" : "Submissions"}
+      </Link>
       <Link href="/internal/assumptions" className={linkClass}>
         {current === "home" ? "· Índice" : "Índice"}
       </Link>

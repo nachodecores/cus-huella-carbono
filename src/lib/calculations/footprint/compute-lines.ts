@@ -9,6 +9,24 @@ function g(ctx: AssumptionContext, key: string): number {
   return ctx.globals.get(key) ?? 0;
 }
 
+export type ManagementType = "sustentable" | "intermedio" | "degradante";
+
+/**
+ * Clasifica el manejo del suelo a partir de las 3 prácticas declaradas en el
+ * cuestionario, para elegir los factores FLU/FMG/FI del módulo de carbono del
+ * suelo. Regla por puntaje (ver plan de huella): >=2 prácticas sustentables
+ * → "sustentable", 1 → "intermedio", 0 → "degradante".
+ */
+export function classifyManagementType(s: SubmissionRow): ManagementType {
+  const score =
+    (s.cover_crop_used ? 1 : 0) +
+    (s.tillage_used ? 0 : 1) +
+    (s.crop_protection_bioinput_used ? 1 : 0);
+  if (score >= 2) return "sustentable";
+  if (score === 1) return "intermedio";
+  return "degradante";
+}
+
 /**
  * Transport MVP rule: assumed mass = `seed_produced_kg` only (no fallback).
  * If missing or non-positive, transport line is skipped.
@@ -358,6 +376,97 @@ export function computeFootprintLines(input: ComputeInput): {
         quantity_unit: "t·km",
         emission_factor: ef,
         emission_factor_unit: "kg CO₂e / t·km",
+        kg_co2e: kg,
+        submission_fertilizer_line_id: null,
+        submission_tillage_line_id: null,
+      });
+    }
+  }
+
+  // --- Suelo: N2O por N aplicado (IPCC 2019 Refinement, Tier 1) ---
+  if (s.fertilizers_used) {
+    const nAplicado = input.fertilizerLines.reduce((acc, fl) => {
+      const nPerUnit = ctx.fertilizerFactors.get(fl.fertilizer_id)?.kgNPerUnit;
+      return acc + fl.total_quantity * (nPerUnit ?? 0);
+    }, 0);
+
+    if (nAplicado > 0) {
+      const ef1 = g(ctx, GLOBAL_PARAM_KEYS.n2oEf1Direct);
+      const fracGasf = g(ctx, GLOBAL_PARAM_KEYS.n2oFracGasf);
+      const ef4 = g(ctx, GLOBAL_PARAM_KEYS.n2oEf4Volatilization);
+      const fracLeach = g(ctx, GLOBAL_PARAM_KEYS.n2oFracLeach);
+      const ef5 = g(ctx, GLOBAL_PARAM_KEYS.n2oEf5Leaching);
+      const nToN2o = g(ctx, GLOBAL_PARAM_KEYS.n2oNToN2oFactor);
+      const gwp100 = g(ctx, GLOBAL_PARAM_KEYS.n2oGwp100);
+
+      const n2oNDirecto = nAplicado * ef1;
+      const nVolatilizado = nAplicado * fracGasf;
+      const n2oNVolat = nVolatilizado * ef4;
+      const nLixiviado = nAplicado * fracLeach;
+      const n2oNLixiviacion = nLixiviado * ef5;
+      const n2oNTotal = n2oNDirecto + n2oNVolat + n2oNLixiviacion;
+      const n2oTotal = n2oNTotal * nToN2o;
+      const kg = n2oTotal * gwp100;
+
+      lines.push({
+        category: "soil_n2o",
+        sort_order: sort++,
+        label: "Emisiones N₂O del suelo (N aplicado)",
+        quantity: nAplicado,
+        quantity_unit: "kg N aplicado",
+        emission_factor: null,
+        emission_factor_unit: "kg CO₂e / kg N (compuesto: directo + indirecto)",
+        kg_co2e: kg,
+        submission_fertilizer_line_id: null,
+        submission_tillage_line_id: null,
+      });
+    }
+  }
+
+  // --- Suelo: carbono orgánico / cambio de uso de suelo (IPCC 2019 AFOLU) ---
+  {
+    const managementType = classifyManagementType(s);
+    const socRef = g(ctx, GLOBAL_PARAM_KEYS.socRefTCPerHa);
+    const amortYears = g(ctx, GLOBAL_PARAM_KEYS.socAmortizationYears);
+
+    const fluKey =
+      managementType === "sustentable"
+        ? GLOBAL_PARAM_KEYS.socFluSustentable
+        : managementType === "intermedio"
+          ? GLOBAL_PARAM_KEYS.socFluIntermedio
+          : GLOBAL_PARAM_KEYS.socFluDegradante;
+    const fmgKey =
+      managementType === "sustentable"
+        ? GLOBAL_PARAM_KEYS.socFmgSustentable
+        : managementType === "intermedio"
+          ? GLOBAL_PARAM_KEYS.socFmgIntermedio
+          : GLOBAL_PARAM_KEYS.socFmgDegradante;
+    const fiKey =
+      managementType === "sustentable"
+        ? GLOBAL_PARAM_KEYS.socFiSustentable
+        : managementType === "intermedio"
+          ? GLOBAL_PARAM_KEYS.socFiIntermedio
+          : GLOBAL_PARAM_KEYS.socFiDegradante;
+
+    const flu = g(ctx, fluKey);
+    const fmg = g(ctx, fmgKey);
+    const fi = g(ctx, fiKey);
+
+    if (socRef > 0 && amortYears > 0) {
+      const socFinal = socRef * flu * fmg * fi;
+      const deltaC = (socFinal - socRef) * areaHa;
+      const co2TotalT = deltaC * (44 / 12);
+      const co2AnualT = co2TotalT / amortYears;
+      const kg = -(co2AnualT * 1000);
+
+      lines.push({
+        category: "soil_carbon",
+        sort_order: sort++,
+        label: `Carbono del suelo (manejo: ${managementType})`,
+        quantity: areaHa,
+        quantity_unit: "ha",
+        emission_factor: null,
+        emission_factor_unit: "t CO₂e/ha/año (SOCref×FLU×FMG×FI, amortizado)",
         kg_co2e: kg,
         submission_fertilizer_line_id: null,
         submission_tillage_line_id: null,

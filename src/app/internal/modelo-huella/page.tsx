@@ -220,6 +220,68 @@ export default function InternalModeloHuellaPage() {
               <code className="text-xs">transport_kg_co2e_per_tonne_km</code>.
             </p>
           </li>
+          <li>
+            <h3 className="inline text-base font-semibold">
+              N₂O del suelo — <code className="font-mono text-xs">soil_n2o</code>
+            </h3>
+            <p className="mt-2 text-neutral-700 dark:text-neutral-300">
+              Metodología IPCC (2019 Refinement) Tier 1. Si hay fertilizantes con N &gt; 0,
+              una sola línea agregada (no por línea de fertilizante):
+            </p>
+            <p className="mt-2 font-mono text-xs whitespace-normal break-words text-neutral-700 dark:text-neutral-300">
+              N_aplicado = Σ (cantidad_total × kg N / unidad del fertilizante)
+              <br />
+              N2O_N_directo = N_aplicado × EF1 (0.01)
+              <br />
+              N_volatilizado = N_aplicado × FracGASF (0.11); N2O_N_volat = N_volatilizado × EF4 (0.01)
+              <br />
+              N_lixiviado = N_aplicado × FracLEACH (0.24); N2O_N_lix = N_lixiviado × EF5 (0.011)
+              <br />
+              N2O_N_total = suma de las tres; N2O_total = N2O_N_total × 1.571
+              <br />
+              kg CO₂e = N2O_total × 273 (GWP100 N₂O)
+            </p>
+            <p className="mt-2 text-neutral-700 dark:text-neutral-300">
+              No duplica el factor de emisión del fertilizante (manufactura/cradle-to-gate):
+              es la emisión en campo por el N aplicado, un componente aditivo estándar en LCA
+              agrícola.
+            </p>
+          </li>
+
+          <li>
+            <h3 className="inline text-base font-semibold">
+              Carbono del suelo — <code className="font-mono text-xs">soil_carbon</code>
+            </h3>
+            <p className="mt-2 text-neutral-700 dark:text-neutral-300">
+              Metodología IPCC (2019 Refinement) AFOLU Cap. 2 (SOC / cambio de uso de suelo).
+              Primero se clasifica el manejo a partir de 3 prácticas del cuestionario (regla
+              por puntaje: cobertura, no-laboreo y bio-insumos suman 1 punto cada una):
+            </p>
+            <p className="mt-2 font-mono text-xs whitespace-normal break-words text-neutral-700 dark:text-neutral-300">
+              score ≥ 2 → sustentable (FLU 0.95, FMG 1.10, FI 1.10)
+              <br />
+              score = 1 → intermedio (FLU 0.80, FMG 0.95, FI 1.00)
+              <br />
+              score = 0 → degradante (FLU 0.80, FMG 0.80, FI 0.90)
+            </p>
+            <p className="mt-2 font-mono text-xs whitespace-normal break-words text-neutral-700 dark:text-neutral-300">
+              SOC_final = SOCref × FLU × FMG × FI
+              <br />
+              Delta_C = (SOC_final − SOCref) × area_ha
+              <br />
+              CO2_total = Delta_C × 44/12; CO2_anual = CO2_total / 20 años
+              <br />
+              kg CO₂e = −(CO2_anual × 1000)
+            </p>
+            <p className="mt-2 text-neutral-700 dark:text-neutral-300">
+              El signo se invierte a propósito: manejo sustentable (factores &gt; 1) da
+              secuestro de carbono → línea <strong>negativa</strong> (crédito, resta del
+              total). Manejo degradante (factores &lt; 1) da pérdida de carbono → línea
+              positiva (emisión). Es la única categoría que puede dar{" "}
+              <code className="font-mono text-xs">kg_co2e</code> negativo; el total de la
+              corrida puede ser negativo si el secuestro supera al resto de las emisiones.
+            </p>
+          </li>
         </ol>
 
         <p className="text-xs text-neutral-500 dark:text-neutral-400">

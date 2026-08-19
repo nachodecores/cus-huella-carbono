@@ -38,6 +38,7 @@ export default async function AssumptionsFertilizersPage({
       fertilizer_id,
       kg_co2e_per_kg_product,
       kg_co2e_per_l_product,
+      kg_n_per_unit_product,
       fertilizers ( label, application_unit )
     `,
     )
@@ -90,6 +91,7 @@ export default async function AssumptionsFertilizersPage({
                 <th className="px-3 py-2 font-medium">Fertilizante</th>
                 <th className="px-3 py-2 font-medium">Unidad aplicación</th>
                 <th className="px-3 py-2 font-medium">Intensidad (CO₂e)</th>
+                <th className="px-3 py-2 font-medium">Contenido de N</th>
               </tr>
             </thead>
             <tbody>
@@ -104,6 +106,7 @@ export default async function AssumptionsFertilizersPage({
                   unit === "l_ha"
                     ? "kg CO₂e / L producto"
                     : "kg CO₂e / kg producto";
+                const nLabel = unit === "l_ha" ? "kg N / L producto" : "kg N / kg producto";
                 return (
                   <tr
                     key={Number(row.fertilizer_id)}
@@ -123,6 +126,22 @@ export default async function AssumptionsFertilizersPage({
                         required
                         defaultValue={
                           current != null ? String(current) : "0"
+                        }
+                        className="w-full max-w-[12rem] rounded border border-neutral-300 bg-white px-2 py-1 text-sm dark:border-neutral-600 dark:bg-neutral-950"
+                      />
+                    </td>
+                    <td className="px-3 py-2">
+                      <span className="sr-only">{nLabel}</span>
+                      <input
+                        name={`n_${Number(row.fertilizer_id)}`}
+                        type="number"
+                        min={0}
+                        step="any"
+                        required
+                        defaultValue={
+                          row.kg_n_per_unit_product != null
+                            ? String(row.kg_n_per_unit_product)
+                            : "0"
                         }
                         className="w-full max-w-[12rem] rounded border border-neutral-300 bg-white px-2 py-1 text-sm dark:border-neutral-600 dark:bg-neutral-950"
                       />
