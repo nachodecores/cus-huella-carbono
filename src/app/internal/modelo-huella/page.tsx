@@ -60,17 +60,14 @@ export default function InternalModeloHuellaPage() {
             Total
           </h2>
           <p className="mt-2 font-mono text-neutral-700 dark:text-neutral-300">
-            total_kg_CO₂e = Σ (kg_CO₂e de cada línea generada, excepto{" "}
-            <code className="font-mono text-xs">soil_carbon</code>)
+            total_kg_CO₂e = Σ (kg_CO₂e de todas las líneas generadas)
           </p>
           <p className="mt-2 text-neutral-700 dark:text-neutral-300">
             La línea <code className="font-mono text-xs">soil_carbon</code> (remociones o
-            pérdidas de carbono del suelo) se calcula y se muestra en el desglose, pero{" "}
-            <strong>no se suma al total</strong>: requiere datos de historial de manejo del
-            campo (cuándo cambió el uso/manejo de suelo) que hoy no se relevan en el
-            cuestionario, y su magnitud (miles de kg CO₂e/ha) puede distorsionar por completo
-            un total pensado para emisiones de proceso. Se reporta aparte, como es habitual en
-            estándares de huella para remociones de carbono del suelo.
+            pérdidas de carbono del suelo, amortizadas a 20 años) <strong>sí se suma al
+            total</strong>, según el criterio IPCC documentado en la planilla de referencia
+            (Emisiones.xlsx, hoja &quot;Laboreo&quot;). Se muestra además desagregada como
+            línea biogénica separada en el desglose por fuente.
           </p>
         </div>
 
@@ -288,8 +285,9 @@ export default function InternalModeloHuellaPage() {
               secuestro de carbono → línea <strong>negativa</strong> (crédito). Manejo
               degradante (factores &lt; 1) da pérdida de carbono → línea positiva (emisión).
               Es la única categoría que puede dar <code className="font-mono text-xs">kg_co2e</code>{" "}
-              negativo — pero, como se indica arriba, esta línea es informativa y{" "}
-              <strong>no se incluye en <code className="font-mono text-xs">total_kg_co2e</code></strong>.
+              negativo, y sí se incluye en{" "}
+              <code className="font-mono text-xs">total_kg_co2e</code> como línea biogénica
+              (ver &quot;Total&quot; arriba).
             </p>
           </li>
         </ol>

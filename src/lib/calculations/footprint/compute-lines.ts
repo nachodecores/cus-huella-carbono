@@ -474,11 +474,10 @@ export function computeFootprintLines(input: ComputeInput): {
     }
   }
 
-  // `soil_carbon` es informativo (remociones/pérdidas de carbono del suelo):
-  // requiere datos de historial de manejo del campo que hoy no relevamos, así
-  // que se muestra como línea aparte pero no se suma al total de la corrida.
-  const total_kg_co2e = lines
-    .filter((row) => row.category !== "soil_carbon")
-    .reduce((acc, row) => acc + row.kg_co2e, 0);
+  // `soil_carbon` (remociones/pérdidas de carbono del suelo, amortizadas a 20
+  // años) se suma al total, según el criterio IPCC documentado en la planilla
+  // de referencia (Emisiones.xlsx, hoja "Laboreo"): además se desagrega como
+  // línea biogénica separada en el desglose por fuente.
+  const total_kg_co2e = lines.reduce((acc, row) => acc + row.kg_co2e, 0);
   return { lines, total_kg_co2e };
 }

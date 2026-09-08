@@ -319,8 +319,8 @@ export default async function InternalFootprintPage({ params }: PageProps) {
               Desglose por línea
             </h3>
             <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-              La línea de carbono del suelo (en cursiva) es informativa y no está incluida en
-              el total.
+              La línea de carbono del suelo (en cursiva) es biogénica y sí está incluida en
+              el total; se muestra desagregada por separado.
             </p>
             <table className="mt-2 w-full min-w-[28rem] border-collapse text-left text-sm">
               <thead>
