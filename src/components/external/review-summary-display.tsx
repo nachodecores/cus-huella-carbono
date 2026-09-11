@@ -1,29 +1,14 @@
 import { ExternalSectionCard } from "@/components/external/external-section-card";
 import type { SaveDraftPayload } from "@/lib/external/draft-save-validation";
-
-function seasonTypeLabel(s: "primavera" | "otono") {
-  return s === "primavera" ? "Primavera" : "Otoño";
-}
-
-function yn(v: boolean) {
-  return v ? "Sí" : "No";
-}
-
-function harvestMethodLabel(m: SaveDraftPayload["harvest_main_method"]): string {
-  if (m === "corte_hilerado") return "Corte e hilerado previo";
-  if (m === "directa") return "Cosecha directa";
-  return String(m);
-}
-
-function dryerEnergyLabel(m: SaveDraftPayload["drying_main_method"]): string {
-  if (!m) return "—";
-  const map: Record<string, string> = {
-    gas: "Gas",
-    gasoil: "Gasoil",
-    electricidad: "Electricidad",
-  };
-  return map[m] ?? m;
-}
+import {
+  dryerEnergyLabel,
+  harvestMethodLabel,
+  rateUnitLabel,
+  seasonTypeLabel,
+  totalMassUnitLabel,
+  yn,
+  type FertilizerCatalogUnit,
+} from "@/lib/labels";
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -36,7 +21,7 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
-export type FertilizerCatalogUnit = "kg_ha" | "l_ha";
+export type { FertilizerCatalogUnit };
 
 export type SubmissionReadonlySummaryProps = {
   companyName: string;
@@ -49,14 +34,6 @@ export type SubmissionReadonlySummaryProps = {
   tillageToolLabelsById: Record<number, string>;
   submittedAt?: string | null;
 };
-
-function rateUnitLabel(u: FertilizerCatalogUnit) {
-  return u === "l_ha" ? "L/ha" : "kg/ha";
-}
-
-function totalMassUnitLabel(u: FertilizerCatalogUnit) {
-  return u === "l_ha" ? "L" : "kg";
-}
 
 export function SubmissionReadonlySummary({
   companyName,

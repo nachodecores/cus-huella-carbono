@@ -174,6 +174,8 @@ CREATE TABLE submission_fertilizer_lines (
   CONSTRAINT submission_fertilizer_lines_total_positive CHECK (total_quantity > 0)
 );
 
+CREATE INDEX idx_submission_fertilizer_lines_submission_id ON submission_fertilizer_lines (submission_id);
+
 CREATE TABLE submission_tillage_lines (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   submission_id uuid NOT NULL REFERENCES crop_season_submissions (id) ON DELETE CASCADE,
