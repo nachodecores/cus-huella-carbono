@@ -260,16 +260,18 @@ export default function InternalModeloHuellaPage() {
               Carbono del suelo — <code className="font-mono text-xs">soil_carbon</code>
             </h3>
             <p className="mt-2 text-neutral-700 dark:text-neutral-300">
-              Metodología IPCC (2019 Refinement) AFOLU Cap. 2 (SOC / cambio de uso de suelo).
-              Primero se clasifica el manejo a partir de 3 prácticas del cuestionario (regla
-              por puntaje: cobertura, no-laboreo y bio-insumos suman 1 punto cada una):
+              Metodología IPCC (2019 Refinement) AFOLU Cap. 2 (SOC), pero comparando contra{" "}
+              <strong>el manejo anterior</strong>, no contra suelo virgen — mismo criterio que
+              la hoja &quot;Laboreo&quot; de Emisiones.xlsx. FLU y FI quedan{" "}
+              <strong>fijos</strong>; solo <code className="font-mono text-xs">FMG</code>{" "}
+              varía según hubo laboreo o siembra directa:
             </p>
             <p className="mt-2 font-mono text-xs whitespace-normal break-words text-neutral-700 dark:text-neutral-300">
-              score ≥ 2 → sustentable (FLU 0.95, FMG 1.10, FI 1.10)
+              FLU = 0.95 (fijo); FI = 1.00 (fijo)
               <br />
-              score = 1 → intermedio (FLU 0.80, FMG 0.95, FI 1.00)
+              tillage_used → FMG = 0.90 (laboreo)
               <br />
-              score = 0 → degradante (FLU 0.80, FMG 0.80, FI 0.90)
+              !tillage_used → FMG = 1.10 (siembra directa)
             </p>
             <p className="mt-2 font-mono text-xs whitespace-normal break-words text-neutral-700 dark:text-neutral-300">
               SOC_final = SOCref × FLU × FMG × FI
@@ -281,13 +283,20 @@ export default function InternalModeloHuellaPage() {
               kg CO₂e = −(CO2_anual × 1000)
             </p>
             <p className="mt-2 text-neutral-700 dark:text-neutral-300">
-              El signo se invierte a propósito: manejo sustentable (factores &gt; 1) da
-              secuestro de carbono → línea <strong>negativa</strong> (crédito). Manejo
-              degradante (factores &lt; 1) da pérdida de carbono → línea positiva (emisión).
-              Es la única categoría que puede dar <code className="font-mono text-xs">kg_co2e</code>{" "}
-              negativo, y sí se incluye en{" "}
-              <code className="font-mono text-xs">total_kg_co2e</code> como línea biogénica
+              El signo se invierte a propósito: siembra directa (FMG &gt; 1) da secuestro de
+              carbono → línea <strong>negativa</strong> (crédito). Laboreo (FMG &lt; 1) da
+              pérdida de carbono → línea positiva (emisión). Es la única categoría que puede
+              dar <code className="font-mono text-xs">kg_co2e</code> negativo, y sí se incluye
+              en <code className="font-mono text-xs">total_kg_co2e</code> como línea biogénica
               (ver &quot;Total&quot; arriba).
+            </p>
+            <p className="mt-2 text-neutral-700 dark:text-neutral-300">
+              <strong>Supuesto:</strong> la amortización a 20 años asume que el manejo actual
+              (laboreo o siembra directa) comenzó hace menos de 20 años. El cuestionario no
+              pregunta desde cuándo se usa cada manejo, así que no hay forma de distinguir un
+              campo recién convertido de uno estable desde hace décadas — se opta por el
+              supuesto más conservador (mayor efecto) en lugar de asumir 0. Si en el futuro se
+              agrega esa pregunta, este cálculo debería ajustarse.
             </p>
           </li>
         </ol>

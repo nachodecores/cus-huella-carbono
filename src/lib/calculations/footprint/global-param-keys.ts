@@ -34,16 +34,15 @@ export const GLOBAL_PARAM_KEYS = {
   n2oNToN2oFactor: "n2o_n_to_n2o_factor",
   n2oGwp100: "n2o_gwp100",
 
-  // --- Suelo: carbono orgánico / cambio de uso de suelo (IPCC 2019 AFOLU) ---
+  // --- Suelo: carbono orgánico por manejo (IPCC 2019 AFOLU) ---
+  // Compara contra el manejo anterior (no contra suelo virgen): FLU y FI fijos
+  // (mismo criterio que la pestaña "Laboreo" de Emisiones.xlsx), solo FMG
+  // varía con laboreo vs. siembra directa. Asume que el manejo actual lleva
+  // menos de 20 años (el cuestionario no pregunta desde cuándo).
   socRefTCPerHa: "soc_ref_t_c_per_ha",
   socAmortizationYears: "soc_amortization_years",
-  socFluSustentable: "soc_flu_sustentable",
-  socFmgSustentable: "soc_fmg_sustentable",
-  socFiSustentable: "soc_fi_sustentable",
-  socFluIntermedio: "soc_flu_intermedio",
-  socFmgIntermedio: "soc_fmg_intermedio",
-  socFiIntermedio: "soc_fi_intermedio",
-  socFluDegradante: "soc_flu_degradante",
-  socFmgDegradante: "soc_fmg_degradante",
-  socFiDegradante: "soc_fi_degradante",
+  socFlu: "soc_flu",
+  socFi: "soc_fi",
+  socFmgTillage: "soc_fmg_tillage",
+  socFmgNoTillage: "soc_fmg_no_tillage",
 } as const;

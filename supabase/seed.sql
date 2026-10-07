@@ -384,75 +384,35 @@ VALUES
   ),
   (
     'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_flu_sustentable',
+    'soc_flu',
     0.95,
     'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo sustentable.',
+    '[fuente] Emisiones.xlsx, hoja "Laboreo" — fijo, compara contra manejo anterior (no contra suelo virgen).',
     25
   ),
   (
     'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_fmg_sustentable',
-    1.1,
+    'soc_fi',
+    1,
     'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo sustentable.',
+    '[fuente] Emisiones.xlsx, hoja "Laboreo" — fijo.',
     26
   ),
   (
     'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_fi_sustentable',
-    1.1,
+    'soc_fmg_tillage',
+    0.9,
     'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo sustentable.',
+    '[fuente] Emisiones.xlsx, hoja "Laboreo" — "Semillero realizado con laboreo". [supuesto] asume manejo actual < 20 años (no se pregunta en el cuestionario desde cuándo).',
     27
   ),
   (
     'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_flu_intermedio',
-    0.8,
+    'soc_fmg_no_tillage',
+    1.1,
     'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo intermedio.',
+    '[fuente] Emisiones.xlsx, hoja "Laboreo" — "Semillero realizado con siembra directa (default)". [supuesto] asume manejo actual < 20 años.',
     28
-  ),
-  (
-    'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_fmg_intermedio',
-    0.95,
-    'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo intermedio.',
-    29
-  ),
-  (
-    'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_fi_intermedio',
-    1,
-    'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo intermedio.',
-    30
-  ),
-  (
-    'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_flu_degradante',
-    0.8,
-    'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo degradante.',
-    31
-  ),
-  (
-    'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_fmg_degradante',
-    0.8,
-    'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo degradante.',
-    32
-  ),
-  (
-    'a2000000-0000-4000-8000-000000000001'::uuid,
-    'soc_fi_degradante',
-    0.9,
-    'dimensionless',
-    '[fuente] planilla SOC — tabla "Tipo de manejo", manejo degradante.',
-    33
   )
 ON CONFLICT (assumption_set_id, param_key) DO NOTHING;
 

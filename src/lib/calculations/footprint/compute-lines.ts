@@ -9,22 +9,17 @@ function g(ctx: AssumptionContext, key: string): number {
   return ctx.globals.get(key) ?? 0;
 }
 
-export type ManagementType = "sustentable" | "intermedio" | "degradante";
+export type ManagementType = "laboreo" | "siembra_directa";
 
 /**
- * Clasifica el manejo del suelo a partir de las 3 prácticas declaradas en el
- * cuestionario, para elegir los factores FLU/FMG/FI del módulo de carbono del
- * suelo. Regla por puntaje (ver plan de huella): >=2 prácticas sustentables
- * → "sustentable", 1 → "intermedio", 0 → "degradante".
+ * Clasifica el manejo del suelo para el módulo de carbono orgánico: solo
+ * mira si hubo laboreo, igual que la pestaña "Laboreo" de Emisiones.xlsx
+ * (ahí es el único factor que varía entre las dos filas de esa tabla —
+ * FLU y FI quedan fijos). No usa cover_crop_used ni
+ * crop_protection_bioinput_used: esos no son parte de ese criterio.
  */
 export function classifyManagementType(s: SubmissionRow): ManagementType {
-  const score =
-    (s.cover_crop_used ? 1 : 0) +
-    (s.tillage_used ? 0 : 1) +
-    (s.crop_protection_bioinput_used ? 1 : 0);
-  if (score >= 2) return "sustentable";
-  if (score === 1) return "intermedio";
-  return "degradante";
+  return s.tillage_used ? "laboreo" : "siembra_directa";
 }
 
 /**
@@ -423,34 +418,24 @@ export function computeFootprintLines(input: ComputeInput): {
     }
   }
 
-  // --- Suelo: carbono orgánico / cambio de uso de suelo (IPCC 2019 AFOLU) ---
+  // --- Suelo: carbono orgánico por manejo (IPCC 2019 AFOLU) ---
+  // Compara contra el manejo anterior, no contra suelo virgen: FLU y FI fijos
+  // (criterio de la pestaña "Laboreo" de Emisiones.xlsx), solo FMG varía con
+  // laboreo vs. siembra directa. Asume manejo actual < 20 años (no se
+  // pregunta en el cuestionario desde cuándo).
   {
     const managementType = classifyManagementType(s);
     const socRef = g(ctx, GLOBAL_PARAM_KEYS.socRefTCPerHa);
     const amortYears = g(ctx, GLOBAL_PARAM_KEYS.socAmortizationYears);
 
-    const fluKey =
-      managementType === "sustentable"
-        ? GLOBAL_PARAM_KEYS.socFluSustentable
-        : managementType === "intermedio"
-          ? GLOBAL_PARAM_KEYS.socFluIntermedio
-          : GLOBAL_PARAM_KEYS.socFluDegradante;
-    const fmgKey =
-      managementType === "sustentable"
-        ? GLOBAL_PARAM_KEYS.socFmgSustentable
-        : managementType === "intermedio"
-          ? GLOBAL_PARAM_KEYS.socFmgIntermedio
-          : GLOBAL_PARAM_KEYS.socFmgDegradante;
-    const fiKey =
-      managementType === "sustentable"
-        ? GLOBAL_PARAM_KEYS.socFiSustentable
-        : managementType === "intermedio"
-          ? GLOBAL_PARAM_KEYS.socFiIntermedio
-          : GLOBAL_PARAM_KEYS.socFiDegradante;
-
-    const flu = g(ctx, fluKey);
-    const fmg = g(ctx, fmgKey);
-    const fi = g(ctx, fiKey);
+    const flu = g(ctx, GLOBAL_PARAM_KEYS.socFlu);
+    const fi = g(ctx, GLOBAL_PARAM_KEYS.socFi);
+    const fmg = g(
+      ctx,
+      managementType === "laboreo"
+        ? GLOBAL_PARAM_KEYS.socFmgTillage
+        : GLOBAL_PARAM_KEYS.socFmgNoTillage,
+    );
 
     if (socRef > 0 && amortYears > 0) {
       const socFinal = socRef * flu * fmg * fi;
