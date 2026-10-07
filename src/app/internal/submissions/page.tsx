@@ -3,6 +3,7 @@ import { cleanSeedMassKg } from "@/lib/calculations/footprint/compute-lines";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { AssumptionsNav } from "@/app/internal/assumptions/_components/assumptions-nav";
 import { RunCalculationForm } from "@/app/internal/footprint/[submissionId]/run-calculation-form";
+import { RecalculateAllForm } from "./recalculate-all-form";
 
 export const dynamic = "force-dynamic";
 
@@ -105,7 +106,11 @@ export default async function InternalSubmissionsPage() {
         <AssumptionsNav current="submissions" />
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
+      <div className="mt-6">
+        <RecalculateAllForm />
+      </div>
+
+      <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-700">
         <table className="w-full min-w-[56rem] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-900">
