@@ -17,7 +17,8 @@ INSERT INTO crops (id, label) VALUES
   (11, 'Moha'),
   (12, 'Alfalfa'),
   (13, 'Sudán'),
-  (14, 'Raigrás perenne')
+  (14, 'Raigrás perenne'),
+  (15, 'Avena')
 ON CONFLICT (id) DO NOTHING;
 
 SELECT setval(
